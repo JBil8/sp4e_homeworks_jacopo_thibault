@@ -1,6 +1,7 @@
 import scipy.optimize as opt
 import numpy as np
 import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
 
 def optimizer(fun, x0): 
     # Check if fun is a function
@@ -36,10 +37,15 @@ def plot_contour(fun, x_values):
     X, Y = np.meshgrid(x, y)
     Z = [fun(np.array([X[i, j], Y[i, j]])) for i in range(X.shape[0]) for j in range(X.shape[1])]
     Z = np.array(Z).reshape(X.shape)
+    z_iterations = [fun(x_values[i, :]) for i in range(len(x_values))]
+    fig = plt.figure(figsize=(10,10))
+    ax = fig.add_subplot(111, projection='3d')
+    surf = ax.plot_surface(X, Y, Z, cmap='viridis', alpha=0.2)
 
-    plt.figure()
-    plt.contour(X, Y, Z, 20)
-    plt.plot(x_values[:, 0], x_values[:, 1], 'r-')
+    # Plot contour lines on the surface
+    contours = ax.contour3D(X, Y, Z, cmap='viridis')
+
+    ax.plot(x_values[:, 0], x_values[:, 1], z_iterations, 'ro--')
 
     plt.show()
     
@@ -49,7 +55,7 @@ def plot_contour(fun, x_values):
 if __name__ == "__main__":
     
     x_values = []
-    optimized = optimizer(S, np.array([0, 0]))
+    optimized = optimizer(S, np.array([4,4]))
     print(x_values)
     plot_contour(S, np.array(x_values))
 
