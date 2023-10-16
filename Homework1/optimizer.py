@@ -4,6 +4,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 
+import GMRES
+
 """
 def optimizer(fun, x0): 
     # Check if fun is a function
@@ -32,8 +34,9 @@ def optimizer(A, b, x0, type="BFGS"):
     elif type == "GMRES":
         results = spla.lgmres(A, b, x0, tol=1e-05, callback=store_x)
     elif type == "GMRES implementation":
-        return "Not implemented yet"
-    
+        results = GMRES.gmres(A, b, x0, tol=1e-05, maxit=100)
+    return results
+
 def S(x):
     """ Function to optimize """
     if x.shape != (2,):
@@ -83,7 +86,7 @@ if __name__ == "__main__":
     x0 = np.array([4, 4])
     x_intermediate = []
 
-    optimized = optimizer(A, b, x0, type="GMRES")
+    optimized = optimizer(A, b, x0, type="GMRES implementation")
     plot_contour(S, np.array(x_intermediate))
 
     
