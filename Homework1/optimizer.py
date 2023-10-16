@@ -6,16 +6,6 @@ from mpl_toolkits.mplot3d import Axes3D
 
 import GMRES
 
-"""
-def optimizer(fun, x0): 
-    # Check if fun is a function
-    if not callable(fun):
-        raise TypeError("fun must be a function")
-    x_intermediate = []
-    
-    results = opt.minimize(fun, x0, method="BFGS", callback=store_x)
-    return results
-"""
 
 def optimizer(A, b, x0, type="BFGS"):
     """ Optimizer for different methods """
@@ -34,8 +24,11 @@ def optimizer(A, b, x0, type="BFGS"):
     elif type == "GMRES":
         results = spla.lgmres(A, b, x0, tol=1e-05, callback=store_x)
     elif type == "GMRES implementation":
-        results = GMRES.gmres(A, b, x0, tol=1e-05, maxit=100)
+        return "GMRES implementation not working yet..."
+        #results = GMRES.gmres(A, b, x0, tol=1e-05, maxit=100, callback=store_x)
     return results
+
+
 
 def S(x):
     """ Function to optimize """
@@ -46,16 +39,18 @@ def S(x):
     return 0.5 * x.T @ A @ x - x.T @ b
 
 
+
 def store_x(x):
     """ Callback function to store the iteration points """
     x_intermediate.append(np.copy(x))
 
 
+
 def plot_contour(fun, x_intermediate):
     """ Visualize the function and the iterations """
     # Create a meshgrid of points
-    x = np.linspace(-5, 5, 100)
-    y = np.linspace(-5, 5, 100)
+    x = np.linspace(-10, 10, 100)
+    y = np.linspace(-10, 10, 100)
     X, Y = np.meshgrid(x, y)
 
     # Evaluate the function at each point for the meshgrid and the iteration points
@@ -83,10 +78,11 @@ if __name__ == "__main__":
 
     A = np.array([[8, 1], [1, 3]])
     b = np.array([2, 4])
-    x0 = np.array([4, 4])
+    x0 = np.array([8, 8])
     x_intermediate = []
 
     optimized = optimizer(A, b, x0, type="GMRES implementation")
+    print(optimized)
     plot_contour(S, np.array(x_intermediate))
 
     

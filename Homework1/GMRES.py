@@ -46,17 +46,19 @@ def gmres(A, b, x0, tol, maxit, callback=None):
         g[i+1] = -s * g[i]
         g[i] = c * g[i]
 
+        # Current solution
+        y = np.linalg.solve(H[:i, :i], g[:i])
+        x = x0 + np.dot(V[:, :i], y).reshape(x0.shape)
+        r = abs(g[i])
+
+        # Callback function
+        if callback:
+            callback(x)
+
+        # Update iteration counter
         i += 1
 
-        #if callback is not None:
-            
-
-    # Solve the least squares problem and compute the solution
-    y = np.linalg.solve(H[:i, :i], g[:i])
-    x = x0 + np.dot(V[:, :i], y)
-    r = abs(g[i])
-
-    return x, r, i
+    return [x, r, i]
 
 
 
