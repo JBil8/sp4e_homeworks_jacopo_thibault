@@ -120,4 +120,4 @@ if __name__ == "__main__":
         else:
             print("Not possible to plot if the system dimension is greater than 2")
 
-    print(np.linalg.solve(A, b))
+    #print(np.linalg.solve(A, b))
