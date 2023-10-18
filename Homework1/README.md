@@ -61,7 +61,6 @@ To reproduce the example in the exercise run:
 - `--x0`: *(Optional)* This argument is the vector representing the initial guess. `x0` should be the same size as `b`. If no vector is given, `x0` is set as a vector of size n filled with 0. .
 - `--type`: *(Optional)* Specify the optimization method. Choices are `BFGS` from **scipy.optimize**, `GMRES` from **scipy.sparse.linalg** and `GMRES implementation`, the GMRES method implemented from scratch. Default is set to `BFGS`.
 - `--plot`: *(Optional)* Include this flag if you want to visualize the function and the iterations (for 2D systems only).
-- `--x0`: *(Optional)* Specify the starting point of the iterative solver
 For detailed help, run the following command:
    ```bash
    python3 optimizer.py -h
