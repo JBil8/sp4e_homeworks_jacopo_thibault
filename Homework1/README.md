@@ -24,7 +24,7 @@ This code provides an implementation of the Generalized Minimal Residual (GMRES)
 - **BFGS**: Uses the BFGS method from `scipy.optimize`.
 - **Visualization** : For 2D systems, the script can visualize the optimization process, showing the iterations and the contour of the function being optimized.
 
-The function ```optimizer.py``` takes the matrix of the linear system ```A``` and the constant term ```b``` as separate inputs, as well as the algorithm to compute the solution.
+The function ```optimizer.py``` takes the matrix of the linear system ```A``` and the constant term ```b``` as separate inputs, as well as the type of algorithm to compute the solution.
 For 2D problems it can also give a visual representation of the intermediate solutions with the function ```plot_contour```.
 The module ```GMRES.py``` provides a simple implementation of the generalized minimal residual method from scratch with Arnoldi iterations and Givens rotations.
 For more details see https://en.wikipedia.org/wiki/Generalized_minimal_residual_method
@@ -56,8 +56,9 @@ To reproduce the example in the exercise run:
 
 
 ### Arguments
-- `--A a11 a12 ... a1j a21 a22 ... aij ... ann`: Define the nxn matrix `A` with elements given line by line of the matrix. In a 2x2 matrix :`a11`, `a12`, `a21` and `a22`.
-- `--b b1 b2 ... bi ... bn`: Define the vector `b` with n elements. In a 2D case: `b1` and `b2`.
+- `--A`: This argument is used to define the matrix A. You should provide the matrix elements row by row. For a 2x2 matrix, we have `--A a11 a12 a21 a22`. Here, `a11` and `a12` are the elements of the first row, while `a21` and `a22` are the elements of the second row.
+-  `--b`: This argument is used to define the vector b, constant term of the system of equation. Simply list down the elements of the vector. For a 2x2 vector, we have `--b b1 b2`.
+- `--x0`: *(Optional)* This argument is the vector representing the initial guess. `x0` should be the same size as `b`. If no vector is given, `x0` is set as a vector of size n filled with 0. .
 - `--type`: *(Optional)* Specify the optimization method. Choices are `BFGS` from **scipy.optimize**, `GMRES` from **scipy.sparse.linalg** and `GMRES implementation`, the GMRES method implemented from scratch. Default is set to `BFGS`.
 - `--plot`: *(Optional)* Include this flag if you want to visualize the function and the iterations.
 

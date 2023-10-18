@@ -26,8 +26,6 @@ def S(x):
     """ Function to optimize """
     if x.shape != (2,):
         raise ValueError("x must be a 2D vector")
-    #A = np.array([[8, 1], [1, 3]])
-    #b = np.array([2, 4])
     return 0.5 * x.T @ A @ x - x.T @ b
 
 
@@ -80,7 +78,7 @@ if __name__ == "__main__":
     # Constant term
     parser.add_argument("--b", nargs="+", type=float, action="append", help="An array represented as a list.\n It is the constant term of the system")
     # Initial guess
-    parser.add_argument("--x0", nargs="+", type=float, action="append", help="An array represented as a list.\n It is the initial gues for the solution")
+    parser.add_argument("--x0", nargs="+", type=float, action="append", help="An array represented as a list.\n It is the initial guess for the solution")
     # Type of optimization
     parser.add_argument("--type", type=str, choices=["BFGS", "GMRES", "GMRES_implementation"], default="BFGS", help="Type of optimization method. (default: BFGS))")
     # Make the plot optional
@@ -120,4 +118,3 @@ if __name__ == "__main__":
         else:
             print("Not possible to plot if the system dimension is greater than 2")
 
-    #print(np.linalg.solve(A, b))
