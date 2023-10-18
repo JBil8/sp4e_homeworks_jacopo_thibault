@@ -27,3 +27,19 @@ pip install -r requirements.txt
 ```
 
 ## Usage
+
+To run the code, follow the command structure below:
+   ```bash
+   python3 optimizer.py --A a11 a12 a21 a22 --b b1 b2 [--type {BFGS,GMRES,GMRES implementation}] [--plot]
+   ``` 
+
+### Arguments
+- `--A a11 a12 a21 a22`: Define the 2x2 matrix `A` with elements `a11`, `a12`, `a21` and `a22`.
+- `--b b1 b2`: Define the 2D vector `b` with elements `b1` and `b2`.
+- `--type`: *(Optional)* Specify the optimization method. Choices are `BFGS` from **scipy.optimize**, `GMRES` from **scipy.sparse.linalg** and `GMRES implementation`, the GMRES method implemented from scratch. Default is set to `BFGS`.
+- `--plot`: *(Optional)* Include this flag if you want to visualize the function and the iterations.
+
+For detailed help, run the following command:
+   ```bash
+   python3 optimizer.py -h
+   ```
