@@ -56,11 +56,11 @@ To reproduce the example in the exercise run:
 
 
 ### Arguments
-- `--A a11 a12 ... a1j a21 a22 ... aij ... ann`: Define the nxn matrix `A` with elements given line by line of the matrix. In a 2x2 matrix :`a11`, `a12`, `a21` and `a22`.
-- `--b b1 b2 ... bi ... bn`: Define the vector `b` with n elements. In a 2D case: `b1` and `b2`.
+- `--A a11 a12 ... a1n ... an1 an2 ... ann`: Define the *nxn* matrix `A` with elements given row by row of the matrix. In a 2x2 matrix :`a11`, `a12`, `a21` and `a22`.
+- `--b b1 b2 ... bi ... bn`: Define the vector `b` with *n* elements. In a 2D case: `b1` and `b2`.
 - `--type`: *(Optional)* Specify the optimization method. Choices are `BFGS` from **scipy.optimize**, `GMRES` from **scipy.sparse.linalg** and `GMRES implementation`, the GMRES method implemented from scratch. Default is set to `BFGS`.
-- `--plot`: *(Optional)* Include this flag if you want to visualize the function and the iterations.
-
+- `--plot`: *(Optional)* Include this flag if you want to visualize the function and the iterations (for 2D systems only).
+- `--x0`: *(Optional)* Specify the starting point of the iterative solver
 For detailed help, run the following command:
    ```bash
    python3 optimizer.py -h
