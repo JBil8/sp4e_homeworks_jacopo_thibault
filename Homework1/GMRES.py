@@ -1,74 +1,88 @@
-import scipy.sparse.linalg as spla
 import numpy as np
-import matplotlib.pyplot as plt
 
-def gmres(A, b, x0, tol, maxit, callback=None):
-    """ GMRES algorithm for solving Ax = b """
+def gmres(A, b, x0, maxit, tol=1e-5, callback=None):
+    n = len(A)
+    m = maxit
+    r = b - np.dot(A, x0)
+    b_norm = np.linalg.norm(b)
+    error = np.linalg.norm(r) / b_norm
 
-    # Compute initial residual and its norm
-    r0 = np.einsum('ij,j->i', A, x0) - b
-    beta = np.linalg.norm(r0)
-
-    # Initialize matrices and vectors
-    V = np.zeros((len(b), maxit+1))
-    V[:,0] = r0/beta
-    g = np.zeros((maxit+1, 1))
-    g[0] = beta
-    Q = np.eye(maxit+1)
-    H = np.zeros((maxit+1, maxit))
-
-    i = 0
-    while (abs(g[i]) > tol) and (i < maxit):
-        
-        # Arnoldi process to construct orthonormal basis
-        w = np.dot(A, V[:, i])
-        for j in range(i+1):
-            H[j, i] = np.einsum('i,i->', w, V[:,j])
-            w -= H[j, i] * V[:,j]
-        H[i+1, i] = np.linalg.norm(w)
-        V[:,i+1] = w / H[i+1, i]
-
-        # Apply Givens rotations to Hessenberg matrix H
-        H[:i+1, i] = np.einsum('ij,j->i', Q[:i+1, :i+1], H[:i+1, i])
-        rho = H[i,i]
-        H[i, i] = np.sqrt(rho**2 + H[i+1, i]**2)
-        c = rho / H[i, i]
-        s = H[i+1, i] / H[i, i]
-        H[i+1, i] = 0
-
-        # Update Q matrix for Givens rotations
-        Q[i+1, :] = -s * Q[i, :]
-        Q[i, :] = c * Q[i, :]
-        Q[i, i+1] = s
-        Q[i+1, i+1] = c
-
-        # Apply Givens rotation to g vector
-        g[i+1] = -s * g[i]
-        g[i] = c * g[i]
-
-        # Current solution
-        y = np.linalg.solve(H[:i, :i], g[:i])
-        x = x0 + np.dot(V[:, :i], y).reshape(x0.shape)
-        r = abs(g[i])
-
-        # Callback function
-        if callback != None:
-            callback(x)
-
-        # Update iteration counter
-        i += 1
-
-    return [x, r, i]
-
-
-
-#############################################
-
-if __name__ == "__main__":
+    sn = np.zeros(m)
+    cs = np.zeros(m)
+    e1 = np.zeros(m + 1)
+    e1[0] = 1
+    e = [error]
+    r_norm = np.linalg.norm(r)
+    Q = np.zeros((n, m + 1))
+    Q[:, 0] = r / r_norm
+    beta = r_norm * e1
+    H = np.zeros((m+1 , m))
     
+    if callback:
+        callback(x0) #store initial guess
+    
+    for k in range(m):
+        
+        H, Q = arnoldi(A, Q, k+1, H)
+        H, cs, sn = apply_givens_rotation(H, cs, sn, k)
+        beta[k + 1] = -sn[k] * beta[k]
+        beta[k] = cs[k] * beta[k]
+        error = abs(beta[k + 1]) / b_norm
+        e.append(error)
+        y = np.linalg.lstsq(H[:m, :m], beta[:m], rcond=None)[0]
+        x = x0 + np.dot(Q[:, :m], y)
+        if callback:
+            callback(x)
+        
+        if error <= tol:
+            break
+
+    results = {'x': x, 'e': e}
+
+    return results
+
+def arnoldi(A, Q, k, H):
+    q = np.dot(A, Q[:, k-1])
+    #H = np.zeros((k+1 , k))
+    for i in range(k):
+        H[i, k-1] = np.dot(Q[:, i], q)
+        q -= H[i, k-1] * Q[:, i]
+    H[k, k-1] = np.linalg.norm(q)
+    Q[:, k] = q / H[k, k-1]
+
+    return H, Q
+
+def apply_givens_rotation(H, cs, sn, k):
+    for i in range(k):
+        temp = cs[i] * H[i, k] + sn[i] * H[i + 1, k]
+        H[i + 1, k] = -sn[i] * H[i, k] + cs[i] * H[i + 1, k]
+        H[i, k] = temp
+
+    cs_k, sn_k = givens_rotation(H[k, k], H[k + 1, k])
+    H[k, k] = cs_k * H[k, k] + sn_k * H[k + 1, k]
+    H[k + 1, k] = 0.0
+    cs[k] = cs_k
+    sn[k] = sn_k
+
+    return H, cs, sn
+
+def givens_rotation(v1, v2):
+    t = np.sqrt(v1**2 + v2**2)
+    cs = v1 / t
+    sn = v2 / t
+    return cs, sn
+
+
+# Example usage
+if __name__ == '__main__':
+
     A = np.array([[8, 1], [1, 3]])
     b = np.array([2, 4])
     x0 = np.array([4, 4])
-    x_intermediate = []
+    max_iterations = 100
+    threshold = 1e-5
+    print("Exact solution:", np.linalg.solve(A, b))
+    results = gmres(A, b, x0, max_iterations, threshold)
+    print("Approximate solution:", results['x'])
+    print("Residual:", results['e'])
 
-    optimized = gmres(A, b, x0, 1e-05, 100)

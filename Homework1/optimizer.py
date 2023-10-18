@@ -7,7 +7,6 @@ import argparse
 
 import GMRES
 
-
 def optimizer(A, b, x0, type="BFGS"):
     """ Optimizer for different methods """
     if A.shape != (2,2):
@@ -15,7 +14,7 @@ def optimizer(A, b, x0, type="BFGS"):
     if b.shape != (2,):
         raise ValueError("b must be a 2D vector")
 
-    if type not in ["BFGS", "GMRES", "GMRES implementation"]:
+    if type not in ["BFGS", "GMRES", "GMRES_implementation"]:
         raise ValueError("type must be either BFGS, GMRES or GMRES implementation (BFGS is default)")
     
     #x_intermediate = []
@@ -23,12 +22,12 @@ def optimizer(A, b, x0, type="BFGS"):
     if type == "BFGS":
         results = opt.minimize(S, x0, method="BFGS", callback=store_x)
     elif type == "GMRES":
-        results = spla.lgmres(A, b, x0, tol=1e-05, callback=store_x)
-    elif type == "GMRES implementation":
+        results_array = spla.lgmres(A, b, x0, tol=1e-05, callback=store_x, atol=1e-05)
+        results = {'x': results_array[0]}
+    elif type == "GMRES_implementation":
         #return "GMRES implementation not working yet..."
         results = GMRES.gmres(A, b, x0, tol=1e-05, maxit=100, callback=store_x)
     return results
-
 
 
 def S(x):
@@ -44,7 +43,6 @@ def S(x):
 def store_x(x):
     """ Callback function to store the iteration points """
     x_intermediate.append(np.copy(x))
-
 
 
 def plot_contour(fun, x_intermediate):
@@ -72,7 +70,6 @@ def plot_contour(fun, x_intermediate):
 
     plt.show()
     
-
 #############################################
 
 if __name__ == "__main__":
@@ -84,7 +81,7 @@ if __name__ == "__main__":
     # b : list of 2 numbers
     parser.add_argument("--b", type=float, nargs=2, required=True, metavar=('b1', 'b2'), help="2D vector b in the form: b1 b2")
     # Type of optimization
-    parser.add_argument("--type", type=str, choices=["BFGS", "GMRES", "GMRES implementation"], default="BFGS", help="Type of optimization method. (default: BFGS))")
+    parser.add_argument("--type", type=str, choices=["BFGS", "GMRES", "GMRES_implementation"], default="BFGS", help="Type of optimization method. (default: BFGS))")
     # Make the plot optional
     parser.add_argument("--plot", action="store_true", help="Plot the results if this flag is set.")
     

@@ -30,7 +30,7 @@ pip install -r requirements.txt
 
 To run the code, follow the command structure below:
    ```bash
-   python3 optimizer.py --A a11 a12 a21 a22 --b b1 b2 [--type {BFGS,GMRES,GMRES implementation}] [--plot]
+   python3 optimizer.py --A a11 a12 a21 a22 --b b1 b2 [--type {BFGS,GMRES,GMRES_implementation}] [--plot]
    ``` 
 
 ### Arguments
