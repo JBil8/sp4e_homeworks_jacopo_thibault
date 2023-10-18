@@ -1,6 +1,6 @@
 import numpy as np
 
-def gmres(A, b, x0, maxit, tol=1e-5, callback=None):
+def gmres(A, b, x0, maxit, tol=1e-10, callback=None):
     n = len(A)  # Get the dimension of the problem
     m = maxit  # Maximum number of iterations
     r = b - np.einsum('ij, j->i', A, x0)  # Calculate the initial residual
@@ -54,7 +54,7 @@ def arnoldi(A, Q, k, H):
         q -= H[i, k - 1] * Q[:, i]
 
     H[k, k - 1] = np.linalg.norm(q)  # Calculate the next entry in Hessenberg matrix
-    Q[:, k] = q / H[k, k - 1]  # Update the basis vector
+    Q[:, k] = q / (H[k, k - 1]+1e-10)  # Update the basis vector
 
     return H, Q
 

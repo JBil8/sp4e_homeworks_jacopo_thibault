@@ -9,14 +9,9 @@ import GMRES
 
 def optimizer(A, b, x0, type="BFGS"):
     """ Optimizer for different methods """
-    if A.shape != (2,2):
-        raise ValueError("A must be a 2x2 matrix")
-    if b.shape != (2,):
-        raise ValueError("b must be a 2D vector")
 
     if type not in ["BFGS", "GMRES", "GMRES_implementation"]:
         raise ValueError("type must be either BFGS, GMRES or GMRES implementation (BFGS is default)")
-    
 
     if type == "BFGS":
         results = opt.minimize(S, x0, method="BFGS", callback=store_x)
@@ -27,7 +22,6 @@ def optimizer(A, b, x0, type="BFGS"):
         results = GMRES.gmres(A, b, x0, tol=1e-05, maxit=100, callback=store_x)
     return results
 
-
 def S(x):
     """ Function to optimize """
     if x.shape != (2,):
@@ -35,7 +29,6 @@ def S(x):
     #A = np.array([[8, 1], [1, 3]])
     #b = np.array([2, 4])
     return 0.5 * x.T @ A @ x - x.T @ b
-
 
 
 def store_x(x):
@@ -83,9 +76,9 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Optimization using various methods.")
     
     # Linear system matrix
-    parser.add_argument("--matrix", nargs="+", type=float, action="append", help="A square matrix represented as a list.\n It is the linear system coefficient matrix")
+    parser.add_argument("--A", nargs="+", type=float, action="append", help="A square matrix represented as a list.\n It is the linear system coefficient matrix")
     # Constant term
-    parser.add_argument("--array", nargs="+", type=float, action="append", help="An array represented as a list.\n It is the constant term of the system")
+    parser.add_argument("--b", nargs="+", type=float, action="append", help="An array represented as a list.\n It is the constant term of the system")
     # Initial guess
     parser.add_argument("--x0", nargs="+", type=float, action="append", help="An array represented as a list.\n It is the initial gues for the solution")
     # Type of optimization
@@ -95,10 +88,10 @@ if __name__ == "__main__":
     
     args = parser.parse_args()
 
-    b = np.asarray(args.array[0])
+    b = np.asarray(args.b[0])
     n = b.shape[0]  #dimension of the system
     try:
-        A = np.array(args.matrix).reshape(n,n)
+        A = np.array(args.A).reshape(n,n)
     except ValueError as e:
         raise ValueError("Array and matrix dimensions not consistent")
 
@@ -126,3 +119,5 @@ if __name__ == "__main__":
             plot_contour(S, np.array(x_intermediate))
         else:
             print("Not possible to plot if the system dimension is greater than 2")
+
+    print(np.linalg.solve(A, b))
