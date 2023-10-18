@@ -3,6 +3,7 @@ import scipy.sparse.linalg as spla
 import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
+import argparse
 
 import GMRES
 
@@ -24,8 +25,8 @@ def optimizer(A, b, x0, type="BFGS"):
     elif type == "GMRES":
         results = spla.lgmres(A, b, x0, tol=1e-05, callback=store_x)
     elif type == "GMRES implementation":
-        return "GMRES implementation not working yet..."
-        #results = GMRES.gmres(A, b, x0, tol=1e-05, maxit=100, callback=store_x)
+        #return "GMRES implementation not working yet..."
+        results = GMRES.gmres(A, b, x0, tol=1e-05, maxit=100, callback=store_x)
     return results
 
 
@@ -76,13 +77,28 @@ def plot_contour(fun, x_intermediate):
 
 if __name__ == "__main__":
 
-    A = np.array([[8, 1], [1, 3]])
-    b = np.array([2, 4])
+    parser = argparse.ArgumentParser(description="Optimization using various methods.")
+    
+    # A : list of 4 numbers (2x2 matrix)
+    parser.add_argument("--A", type=float, nargs=4, required=True, metavar=('a11', 'a12', 'a21', 'a22'), help="2x2 matrix A in the form: a11 a12 a21 a22")
+    # b : list of 2 numbers
+    parser.add_argument("--b", type=float, nargs=2, required=True, metavar=('b1', 'b2'), help="2D vector b in the form: b1 b2")
+    # Type of optimization
+    parser.add_argument("--type", type=str, choices=["BFGS", "GMRES", "GMRES implementation"], default="BFGS", help="Type of optimization method. (default: BFGS))")
+    # Make the plot optional
+    parser.add_argument("--plot", action="store_true", help="Plot the results if this flag is set.")
+    
+    args = parser.parse_args()
+
+    # Convert the list of numbers to numpy arrays
+    A = np.array(args.A).reshape(2, 2)
+    b = np.array(args.b)
     x0 = np.array([8, 8])
     x_intermediate = []
 
-    optimized = optimizer(A, b, x0, type="GMRES implementation")
-    print(optimized)
-    plot_contour(S, np.array(x_intermediate))
-
+    optimized = optimizer(A, b, x0, type=args.type)
+    print(optimized["x"])
+    print(x_intermediate)
     
+    if args.plot:
+        plot_contour(S, np.array(x_intermediate))

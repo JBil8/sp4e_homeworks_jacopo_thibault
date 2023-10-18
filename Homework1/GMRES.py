@@ -52,14 +52,13 @@ def gmres(A, b, x0, tol, maxit, callback=None):
         r = abs(g[i])
 
         # Callback function
-        if callback:
+        if callback != None:
             callback(x)
 
         # Update iteration counter
         i += 1
 
     return [x, r, i]
-
 
 
 
