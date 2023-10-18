@@ -1,54 +1,63 @@
 import numpy as np
 
 def gmres(A, b, x0, maxit, tol=1e-5, callback=None):
-    n = len(A)
-    m = maxit
-    r = b - np.dot(A, x0)
-    b_norm = np.linalg.norm(b)
-    error = np.linalg.norm(r) / b_norm
+    n = len(A)  # Get the dimension of the problem
+    m = maxit  # Maximum number of iterations
+    r = b - np.dot(A, x0)  # Calculate the initial residual
+    b_norm = np.linalg.norm(b)  # Calculate the norm of the right-hand side vector
+    error = np.linalg.norm(r) / b_norm  # Calculate the initial error
 
-    sn = np.zeros(m)
-    cs = np.zeros(m)
-    e1 = np.zeros(m + 1)
+    sn = np.zeros(m)  # Sine components for Givens rotation
+    cs = np.zeros(m)  # Cosine components for Givens rotation
+    e1 = np.zeros(m + 1)  # unit vector
     e1[0] = 1
-    e = [error]
-    r_norm = np.linalg.norm(r)
-    Q = np.zeros((n, m + 1))
-    Q[:, 0] = r / r_norm
-    beta = r_norm * e1
-    H = np.zeros((m+1 , m))
-    
+    e = [error]  # List to store error values
+    r_norm = np.linalg.norm(r) 
+    Q = np.zeros((n, m + 1))  # Matrix to store basis vectors
+    Q[:, 0] = r / r_norm  # Set the  first column
+    beta = r_norm * e1  
+    H = np.zeros((m + 1, m))  # Hessenberg matrix
+
     if callback:
-        callback(x0) #store initial guess
-    
+        callback(x0)  # Store the initial guess in the callback function
+
     for k in range(m):
-        
-        H, Q = arnoldi(A, Q, k+1, H)
+        # Arnoldi process
+        H, Q = arnoldi(A, Q, k + 1, H)
+
+        # Apply Givens rotation to H
         H, cs, sn = apply_givens_rotation(H, cs, sn, k)
+
+        # Update the residual vector
         beta[k + 1] = -sn[k] * beta[k]
         beta[k] = cs[k] * beta[k]
         error = abs(beta[k + 1]) / b_norm
         e.append(error)
+
+        # Solve for y using the upper triangular Hessenberg matrix H
         y = np.linalg.lstsq(H[:m, :m], beta[:m], rcond=None)[0]
+
+        # Update the solution
         x = x0 + np.dot(Q[:, :m], y)
+
         if callback:
-            callback(x)
-        
-        if error <= tol:
+            callback(x)  # Store the current solution in the callback function
+
+        if error <= tol:  # Check if the error is below the tolerance
             break
 
-    results = {'x': x, 'e': e}
+    results = {'x': x, 'e': e}  # Store the final solution and error values in dictionary
 
     return results
 
 def arnoldi(A, Q, k, H):
-    q = np.dot(A, Q[:, k-1])
-    #H = np.zeros((k+1 , k))
+    q = np.dot(A, Q[:, k - 1])  # Create the next basis vector
     for i in range(k):
-        H[i, k-1] = np.dot(Q[:, i], q)
-        q -= H[i, k-1] * Q[:, i]
-    H[k, k-1] = np.linalg.norm(q)
-    Q[:, k] = q / H[k, k-1]
+        H[i, k - 1] = np.dot(Q[:, i], q)
+        q -= H[i, k - 1] * Q[:, i]
+
+    H[k, k - 1] = np.linalg.norm(q)  # Calculate the next entry in Hessenberg matrix
+    Q[:, k] = q / H[k, k - 1]  # Update the basis vector
 
     return H, Q
 
@@ -58,11 +67,11 @@ def apply_givens_rotation(H, cs, sn, k):
         H[i + 1, k] = -sn[i] * H[i, k] + cs[i] * H[i + 1, k]
         H[i, k] = temp
 
-    cs_k, sn_k = givens_rotation(H[k, k], H[k + 1, k])
+    cs_k, sn_k = givens_rotation(H[k, k], H[k + 1, k])  # Compute the Givens rotation
     H[k, k] = cs_k * H[k, k] + sn_k * H[k + 1, k]
     H[k + 1, k] = 0.0
-    cs[k] = cs_k
-    sn[k] = sn_k
+    cs[k] = cs_k  # Update cosine component
+    sn[k] = sn_k  # Update sine component
 
     return H, cs, sn
 
