@@ -53,11 +53,6 @@ def plot_contour(fun, x_intermediate):
     # Calculate the distance from the result to the initial point x0 to plot the right domain
     distances = [abs(point[0] - result[0]) for point in x_intermediate[:-1]], [abs(point[1] - result[1]) for point in x_intermediate[:-1]]
     max_distance = max(max(distances[0]), max(distances[1])) * 1.1 # Add 10% to the distance to make sure the result is in the plot
-   
-    # Calculate the distance from the result to the initial point x0 to plot the right domain
-    #dx = abs(x0[0] - result[0])
-    #dy = abs(x0[1] - result[1])
-    #distance = max(dx, dy) * 1.1 # Add 10% to the distance to make sure the result is in the plot
     
     # Create a meshgrid of points centered around the result
     x = np.linspace(result[0]-max_distance, result[0]+max_distance, 100) 
