@@ -25,7 +25,6 @@ def optimizer(A, b, x0, type="BFGS"):
         results_array = spla.lgmres(A, b, x0, tol=1e-05, callback=store_x, atol=1e-05)
         results = {'x': results_array[0]}
     elif type == "GMRES_implementation":
-        #return "GMRES implementation not working yet..."
         results = GMRES.gmres(A, b, x0, tol=1e-05, maxit=100, callback=store_x)
     return results
 
@@ -34,8 +33,8 @@ def S(x):
     """ Function to optimize """
     if x.shape != (2,):
         raise ValueError("x must be a 2D vector")
-    A = np.array([[8, 1], [1, 3]])
-    b = np.array([2, 4])
+    #A = np.array([[8, 1], [1, 3]])
+    #b = np.array([2, 4])
     return 0.5 * x.T @ A @ x - x.T @ b
 
 
@@ -47,9 +46,22 @@ def store_x(x):
 
 def plot_contour(fun, x_intermediate):
     """ Visualize the function and the iterations """
-    # Create a meshgrid of points
-    x = np.linspace(-10, 10, 100)
-    y = np.linspace(-10, 10, 100)
+    
+    # Retrieve the result from the last iteration
+    result = x_intermediate[-1]
+
+    # Calculate the distance from the result to the initial point x0 to plot the right domain
+    distances = [abs(point[0] - result[0]) for point in x_intermediate[:-1]], [abs(point[1] - result[1]) for point in x_intermediate[:-1]]
+    max_distance = max(max(distances[0]), max(distances[1])) * 1.1 # Add 10% to the distance to make sure the result is in the plot
+   
+    # Calculate the distance from the result to the initial point x0 to plot the right domain
+    #dx = abs(x0[0] - result[0])
+    #dy = abs(x0[1] - result[1])
+    #distance = max(dx, dy) * 1.1 # Add 10% to the distance to make sure the result is in the plot
+    
+    # Create a meshgrid of points centered around the result
+    x = np.linspace(result[0]-max_distance, result[0]+max_distance, 100) 
+    y = np.linspace(result[1]-max_distance, result[1]+max_distance, 100)
     X, Y = np.meshgrid(x, y)
 
     # Evaluate the function at each point for the meshgrid and the iteration points
@@ -90,12 +102,17 @@ if __name__ == "__main__":
     # Convert the list of numbers to numpy arrays
     A = np.array(args.A).reshape(2, 2)
     b = np.array(args.b)
-    x0 = np.array([8, 8])
+    x0 = np.array([10, 10])
     x_intermediate = []
+    x_intermediate.append(np.copy(x0))
 
     optimized = optimizer(A, b, x0, type=args.type)
-    print(optimized["x"])
-    print(x_intermediate)
+    if args.type == "GMRES":
+        print("GMRES (scipy) solution:", optimized['x'])
+    elif args.type == "GMRES_implementation":
+        print("GMRES (from scratch) solution:", optimized['x'])
+    elif args.type == "BFGS":
+        print("BFGS solution:", optimized['x'])
     
     if args.plot:
         plot_contour(S, np.array(x_intermediate))
