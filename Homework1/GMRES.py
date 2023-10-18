@@ -3,7 +3,7 @@ import numpy as np
 def gmres(A, b, x0, maxit, tol=1e-5, callback=None):
     n = len(A)  # Get the dimension of the problem
     m = maxit  # Maximum number of iterations
-    r = b - np.dot(A, x0)  # Calculate the initial residual
+    r = b - np.einsum('ij, j->i', A, x0)  # Calculate the initial residual
     b_norm = np.linalg.norm(b)  # Calculate the norm of the right-hand side vector
     error = np.linalg.norm(r) / b_norm  # Calculate the initial error
 
@@ -17,9 +17,6 @@ def gmres(A, b, x0, maxit, tol=1e-5, callback=None):
     Q[:, 0] = r / r_norm  # Set the  first column
     beta = r_norm * e1  
     H = np.zeros((m + 1, m))  # Hessenberg matrix
-
-    if callback:
-        callback(x0)  # Store the initial guess in the callback function
 
     for k in range(m):
         # Arnoldi process
@@ -38,7 +35,7 @@ def gmres(A, b, x0, maxit, tol=1e-5, callback=None):
         y = np.linalg.lstsq(H[:m, :m], beta[:m], rcond=None)[0]
 
         # Update the solution
-        x = x0 + np.dot(Q[:, :m], y)
+        x = x0 + np.einsum('ij, j->i', Q[:, :m], y)
 
         if callback:
             callback(x)  # Store the current solution in the callback function
@@ -51,9 +48,9 @@ def gmres(A, b, x0, maxit, tol=1e-5, callback=None):
     return results
 
 def arnoldi(A, Q, k, H):
-    q = np.dot(A, Q[:, k - 1])  # Create the next basis vector
+    q = np.einsum('ij, j->i', A, Q[:, k - 1])  # Create the next basis vector
     for i in range(k):
-        H[i, k - 1] = np.dot(Q[:, i], q)
+        H[i, k - 1] = np.einsum('i, i', Q[:, i], q)
         q -= H[i, k - 1] * Q[:, i]
 
     H[k, k - 1] = np.linalg.norm(q)  # Calculate the next entry in Hessenberg matrix
@@ -76,9 +73,13 @@ def apply_givens_rotation(H, cs, sn, k):
     return H, cs, sn
 
 def givens_rotation(v1, v2):
-    t = np.sqrt(v1**2 + v2**2)
-    cs = v1 / t
-    sn = v2 / t
+    if (v1==0):
+        cs = 0
+        sn = 1
+    else:
+        t = np.sqrt(v1**2 + v2**2)
+        cs = v1 / t
+        sn = v2 / t
     return cs, sn
 
 

@@ -17,7 +17,6 @@ def optimizer(A, b, x0, type="BFGS"):
     if type not in ["BFGS", "GMRES", "GMRES_implementation"]:
         raise ValueError("type must be either BFGS, GMRES or GMRES implementation (BFGS is default)")
     
-    #x_intermediate = []
 
     if type == "BFGS":
         results = opt.minimize(S, x0, method="BFGS", callback=store_x)
@@ -83,10 +82,12 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description="Optimization using various methods.")
     
-    # A : list of 4 numbers (2x2 matrix)
-    parser.add_argument("--A", type=float, nargs=4, required=True, metavar=('a11', 'a12', 'a21', 'a22'), help="2x2 matrix A in the form: a11 a12 a21 a22")
-    # b : list of 2 numbers
-    parser.add_argument("--b", type=float, nargs=2, required=True, metavar=('b1', 'b2'), help="2D vector b in the form: b1 b2")
+    # Linear system matrix
+    parser.add_argument("--matrix", nargs="+", type=float, action="append", help="A square matrix represented as a list.\n It is the linear system coefficient matrix")
+    # Constant term
+    parser.add_argument("--array", nargs="+", type=float, action="append", help="An array represented as a list.\n It is the constant term of the system")
+    # Initial guess
+    parser.add_argument("--x0", nargs="+", type=float, action="append", help="An array represented as a list.\n It is the initial gues for the solution")
     # Type of optimization
     parser.add_argument("--type", type=str, choices=["BFGS", "GMRES", "GMRES_implementation"], default="BFGS", help="Type of optimization method. (default: BFGS))")
     # Make the plot optional
@@ -94,10 +95,21 @@ if __name__ == "__main__":
     
     args = parser.parse_args()
 
-    # Convert the list of numbers to numpy arrays
-    A = np.array(args.A).reshape(2, 2)
-    b = np.array(args.b)
-    x0 = np.array([10, 10])
+    b = np.asarray(args.array[0])
+    n = b.shape[0]  #dimension of the system
+    try:
+        A = np.array(args.matrix).reshape(n,n)
+    except ValueError as e:
+        raise ValueError("Array and matrix dimensions not consistent")
+
+    if args.x0:
+        if(len(args.x0[0]) != n ):
+            raise ValueError("The initial guess should be the same size as the constant term")
+        else:
+            x0 = np.asarray(args.x0[0])
+    else:
+        x0 = np.zeros(n)
+
     x_intermediate = []
     x_intermediate.append(np.copy(x0))
 
@@ -110,4 +122,7 @@ if __name__ == "__main__":
         print("BFGS solution:", optimized['x'])
     
     if args.plot:
-        plot_contour(S, np.array(x_intermediate))
+        if n <=2:
+            plot_contour(S, np.array(x_intermediate))
+        else:
+            print("Not possible to plot if the system dimension is greater than 2")
