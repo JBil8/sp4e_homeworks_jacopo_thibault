@@ -1,0 +1,8 @@
+project(snippet)
+file(GLOB SOURCES ${PROJECT_SOURCE_DIR}/*.cc)
+foreach(f ${SOURCES})
+  message(STATUS ${f})
+  get_filename_component(basename ${f} NAME_WE)
+  get_filename_component(dir ${f} DIRECTORY)
+  add_executable(${basename} ${f})
+endforeach()
