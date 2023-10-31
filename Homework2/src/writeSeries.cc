@@ -10,6 +10,9 @@ WriteSeries::WriteSeries(Series & series, int maxiter, const std::string& filena
 
 void WriteSeries::dump() {
     std::ofstream file(filename);
+    //concatenate the filename with the separator
+    filename = filename + separator;    
+
     if (!file) {
         std::cerr << "Error: Could not open file " << filename << " for writing." << std::endl;
         return;
@@ -32,3 +35,23 @@ void WriteSeries::dump() {
 
     std::cout << "Series written to file " << filename << std::endl;
 }
+
+std::string WriteSeries::setSeparator(std::string separator){
+    this->separator = separator;
+    std::string fileExtension = ".txt";
+    //switch between separators to decide . gets txt , gets csv and | gets psv
+    if (separator == "."){
+        fileExtension = "txt";
+    }
+    else if (separator == ","){
+        fileExtension =  "csv";
+    }
+    else if (separator == "|"){
+        fileExtension = "psv";
+    }
+    else{
+        std::cerr << "Error: Unknown separator " << separator << std::endl;
+        return "";
+    }
+    return separator;
+};
