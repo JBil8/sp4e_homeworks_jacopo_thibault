@@ -4,6 +4,8 @@
 #include "series.hh"
 #include "computeArithmetic.hh"
 #include "computePi.hh"
+#include "dumperSeries.hh"
+#include "printSeries.hh"
 
 int main(int argc, char* argv[]) {
 
@@ -24,6 +26,10 @@ int main(int argc, char* argv[]) {
     unsigned int N = 20;
     double a = series_object->compute(N);
     std::cout << "The computed series for N=" << N << " is " << a << std::endl;
+
+    // Dump the series
+    PrintSeries print_series(*series_object, 1.0, N);
+    print_series.dump();
 
     return 0;
 }
