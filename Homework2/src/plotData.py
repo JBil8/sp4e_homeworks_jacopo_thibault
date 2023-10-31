@@ -1,5 +1,6 @@
 import pandas as pd
 import matplotlib.pyplot as plt
+import sys
 
 def get_separator(filename):
     extension = filename.split('.')[-1]
@@ -18,8 +19,8 @@ def read_data(filename):
 def plot_data(data):
     plt.figure(figsize=(10, 5))
     
-    plt.plot(data['Iterations'], data['Series value'], marker='o', linestyle='-', color='b', label='Series Value')
-    plt.plot(data['Iterations'], data['Analytic Prediction'], marker='s', linestyle='--', color='r', label='Analytic Prediction')
+    plt.plot(data['Iterations'], data['Series_Value'], marker='o', linestyle='-', color='b', label='Series Value')
+    plt.plot(data['Iterations'], data['Analytic_Prediction'], linestyle='-', color='r', label='Analytic Prediction')
     
     plt.title('Numerical Results')
     plt.xlabel('Iteration')
@@ -29,6 +30,6 @@ def plot_data(data):
     plt.show()
 
 if __name__ == "__main__":
-    filename = input("Enter the filename: ")
+    filename = sys.argv[1]
     data = read_data(filename)
     plot_data(data)
