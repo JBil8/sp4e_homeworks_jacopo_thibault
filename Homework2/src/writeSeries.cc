@@ -19,27 +19,36 @@ void WriteSeries::setSeparator(std::string s) {
 
 void WriteSeries::dump() {
     
-    std::ofstream file(filename);
-    //concatenate the filename with the separator
-    filename = filename + separator;    
+    // Add the file extension to the filename based on the separator
+    if (separator == ",") {
+            filename += ".csv";
+        } else if (separator == "|") {
+            filename += ".psv";
+        } else {
+            filename += ".txt";
+        }
 
+    // Open the file
+    std::ofstream file(filename);
     if (!file) {
         std::cerr << "Error: Could not open file " << filename << " for writing." << std::endl;
         return;
     }
 
+    // Write the series to the file
     double analytic_prediction = series.getAnalyticPrediction();
-    file << "Analytic prediction: ";
+    file << "Iterations" << this->separator << "Series value" << this->separator << "Analytic Prediction" << std::endl;
+    
+    /*
     if (!std::isnan(analytic_prediction)) {
         file << analytic_prediction << std::endl;
     } else {
         file << "Not available" << std::endl;
-    }
-    
+    }*/
 
     for (int i = 1; i < maxiter+1; i++) {
         double series_value = series.compute(i);
-        file << i << this->separator << series_value << std::endl;
+        file << i << this->separator << series_value << this->separator << analytic_prediction << std::endl;
     }
 
     file.close();
