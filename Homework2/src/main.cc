@@ -32,6 +32,7 @@ int main(int argc, char* argv[]) {
 
     // Write the series
     WriteSeries write_series(*series_object, N, "series.txt");
+    write_series.setSeparator("|");
     write_series.dump();
 
     return 0;

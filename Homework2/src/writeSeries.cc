@@ -3,12 +3,22 @@
 #include <iostream>
 #include <cmath>
 
-WriteSeries::WriteSeries(Series & series, int maxiter, const std::string& filename) 
+WriteSeries::WriteSeries(Series &series, int maxiter, const std::string& filename) 
     : DumperSeries(series),  // Call the constructor of DumperSeries
       maxiter(maxiter),
-      filename(filename) {};
+      filename(filename),
+      separator(" ") {};
+
+
+void WriteSeries::setSeparator(std::string s) {
+    if (!s.empty()) {
+        this->separator = s;
+    }
+}
+
 
 void WriteSeries::dump() {
+    
     std::ofstream file(filename);
     if (!file) {
         std::cerr << "Error: Could not open file " << filename << " for writing." << std::endl;
@@ -22,13 +32,16 @@ void WriteSeries::dump() {
     } else {
         file << "Not available" << std::endl;
     }
+    
 
     for (int i = 1; i < maxiter+1; i++) {
         double series_value = series.compute(i);
-        file << "Series value at iteration " << i << ": " << series_value << std::endl;
+        file << i << this->separator << series_value << std::endl;
     }
 
     file.close();
 
     std::cout << "Series written to file " << filename << std::endl;
 }
+
+

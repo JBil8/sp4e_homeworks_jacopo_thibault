@@ -7,11 +7,13 @@
 
 class WriteSeries: public DumperSeries{
 public:
-    WriteSeries(Series& series, int maxiter, const std::string& filename);
+    WriteSeries(Series& series, int maxiter, const std::string& filename); // Constructor
     void dump() override;
+    void setSeparator(std::string s);
 private:
     int maxiter;
     std::string filename;
+    std::string separator;
 };
 
 
