@@ -6,7 +6,7 @@
 
 class PrintSeries: public DumperSeries{
 public:
-    PrintSeries(Series & series, double frequency, int maxiter);
+    PrintSeries(Series & series, int frequency, int maxiter);
     void dump() override;
 private:
     double frequency;

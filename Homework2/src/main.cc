@@ -24,11 +24,9 @@ int main(int argc, char* argv[]) {
     }
 
     unsigned int N = 20;
-    double a = series_object->compute(N);
-    std::cout << "The computed series for N=" << N << " is " << a << std::endl;
 
     // Dump the series
-    PrintSeries print_series(*series_object, 1.0, N);
+    PrintSeries print_series(*series_object, 2, N);
     print_series.dump();
 
     return 0;
