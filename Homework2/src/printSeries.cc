@@ -12,7 +12,7 @@ void PrintSeries::dump() {
     std::cout << "Max iterations: " << maxiter << std::endl;
 
     double analytic_prediction = series.getAnalyticPrediction();
-    
+
     /* if (!std::isnan(analytic_prediction)) {
         std::cout << "Analytic prediction: " << analytic_prediction << std::endl;
     } else {

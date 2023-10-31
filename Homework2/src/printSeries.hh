@@ -9,7 +9,7 @@ public:
     PrintSeries(Series & series, int frequency, int maxiter);
     void dump() override;
 private:
-    double frequency;
+    int frequency;
     int maxiter;
 };
 

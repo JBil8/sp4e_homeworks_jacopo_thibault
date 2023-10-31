@@ -6,6 +6,7 @@
 #include "computePi.hh"
 #include "dumperSeries.hh"
 #include "printSeries.hh"
+#include "writeSeries.hh"
 
 int main(int argc, char* argv[]) {
 
@@ -28,6 +29,10 @@ int main(int argc, char* argv[]) {
     // Dump the series
     PrintSeries print_series(*series_object, 2, N);
     print_series.dump();
+
+    // Write the series
+    WriteSeries write_series(*series_object, N, "series.txt");
+    write_series.dump();
 
     return 0;
 }
