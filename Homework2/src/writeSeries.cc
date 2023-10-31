@@ -37,7 +37,7 @@ void WriteSeries::dump() {
 
     // Write the series to the file
     double analytic_prediction = series.getAnalyticPrediction();
-    file << "Iterations" << this->separator << "Series value" << this->separator << "Analytic Prediction" << std::endl;
+    file << "Iterations" << this->separator << "Series_Value" << this->separator << "Analytic_Prediction" << std::endl;
     
     /*
     if (!std::isnan(analytic_prediction)) {
