@@ -6,7 +6,6 @@ PrintSeries::PrintSeries(Series & series, double frequency, int maxiter)
       frequency(frequency),
       maxiter(maxiter) {};
 
-
 void PrintSeries::dump() {
     std::cout << "Series: " << series.compute(10) << std::endl;
 };

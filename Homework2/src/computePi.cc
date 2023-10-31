@@ -11,3 +11,7 @@ double ComputePi::compute(unsigned int N) {
     result = sqrt(result);
     return result;
 }
+
+double ComputePi::getAnalyticPrediction() {
+    return M_PI;
+}
