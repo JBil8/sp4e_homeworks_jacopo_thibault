@@ -12,6 +12,7 @@ public:
     void setSeparator(std::string s);
 private:
     int maxiter;
+    std::string separator;
     std::string filename;
     std::string separator;
 };

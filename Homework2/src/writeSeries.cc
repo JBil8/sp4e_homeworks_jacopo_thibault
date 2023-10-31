@@ -20,6 +20,9 @@ void WriteSeries::setSeparator(std::string s) {
 void WriteSeries::dump() {
     
     std::ofstream file(filename);
+    //concatenate the filename with the separator
+    filename = filename + separator;    
+
     if (!file) {
         std::cerr << "Error: Could not open file " << filename << " for writing." << std::endl;
         return;
