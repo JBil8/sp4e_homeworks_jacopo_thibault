@@ -14,11 +14,10 @@
 
 // Function to display usage information
 void usage() {
-    std::cerr << "Usage: ./src/snippet <type> <N> <f> <filename> <dump> [<p>]" << std::endl;
+    std::cerr << "Usage: ./src/snippet <type> <N> <f> <dump> [<p>]" << std::endl;
     std::cerr << "  type: pi, arithmetic or riemann" << std::endl;
-    std::cerr << "  N: number of iterations" << std::endl;
+    std::cerr << "  N: number of iterations for pi and arithmetic or number of discretization for riemann" << std::endl;
     std::cerr << "  f: frequency of dumping" << std::endl;
-    std::cerr << "  filename: name of the output file" << std::endl;
     std::cerr << "  dump: print or write" << std::endl;
     std::cerr << "  p: (Optional) precision of the output" << std::endl;
 }
@@ -91,6 +90,11 @@ int main(int argc, char* argv[]) {
         print_series.dump(std::cout);
 
     } else if (dump_type == "write") {
+
+        // Parse the remaining arguments
+        std::string filename;
+        std::cout << "Enter the filename for the output file (no extension necessary): ";
+        std::cin >> filename;
 
         std::string separator;
         std::cout << "Enter the separator for the output file (, for .csv, | for .psv or a generic key for default (.txt)): ";
