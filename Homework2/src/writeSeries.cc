@@ -25,10 +25,7 @@ void WriteSeries::setPrecision(unsigned int precision){
 
 void WriteSeries::dump(std::ostream &os) {
     
-    
-
     // Open the file
-    //std::ofstream file(filename);
     if (!os) {
         std::cerr << "Error: Could not open file " << filename << " for writing." << std::endl;
         return;
@@ -55,8 +52,6 @@ void WriteSeries::dump(std::ostream &os) {
         double series_value = series.compute(i);
         os << i << this->separator << series_value << this->separator << analytic_prediction << std::endl;
     }
-
-    //os.close();
 
     std::cout << "Series written to file " << filename << std::endl;
 }

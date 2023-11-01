@@ -14,7 +14,6 @@ public:
     ~RiemannIntegral() {};
 
 private:
-
     double a, b;
     std::function<double(double)> f;
 

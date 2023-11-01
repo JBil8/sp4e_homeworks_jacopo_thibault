@@ -8,7 +8,11 @@
 class WriteSeries: public DumperSeries{
 
 public:
-    WriteSeries(Series& series, int maxiter, const std::string& filename); // Constructor
+    // Constructor
+    WriteSeries(Series& series, int maxiter, const std::string& filename); 
+
+    // Destructor
+    ~WriteSeries() {};
     
 private:
     int maxiter;
