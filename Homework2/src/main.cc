@@ -24,7 +24,7 @@ void usage() {
 
 int main(int argc, char* argv[]) {
     // Ensure the correct number of arguments are provided
-    if (argc < 5) {
+    if (argc < 6) {
         usage();
         return 1;
     }
@@ -39,7 +39,7 @@ int main(int argc, char* argv[]) {
     }
 
     args >> series_type >> num_iterations >> frequency >> dump_type;
-    if (argc == 5) {
+    if (argc == 6) {
         args >> precision;
     }
 
@@ -63,18 +63,23 @@ int main(int argc, char* argv[]) {
 
         // Define the function
         std::function<double(double)> f;
+        std::function<double(double)> integral_f;
+        
         if (f_type == "cubic") {
             f = [](double x) { return 1.0* x * x * x; };
+            integral_f = [](double x) { return pow(x,4)/4 ; };
         } else if (f_type == "cos") {
             f = [](double x) { return std::cos(x); };
+            integral_f = [](double x) { return std::sin(x) ; };
         } else if (f_type == "sin") {
             f = [](double x) { return std::sin(x); };
+            integral_f = [](double x) { return -1.*std::cos(x) ; };
         } else {
             std::cerr << "Unknown function type: " << f_type << std::endl;
             usage();
             return 1;
         }
-        series_object = std::make_shared<RiemannIntegral>(a, b, f);
+        series_object = std::make_shared<RiemannIntegral>(a, b, f, integral_f);
     } else {
         std::cerr << "Unknown series type: " << series_type << std::endl;
         usage();
