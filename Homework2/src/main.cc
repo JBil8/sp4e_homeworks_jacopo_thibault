@@ -24,7 +24,7 @@ void usage() {
 
 int main(int argc, char* argv[]) {
     // Ensure the correct number of arguments are provided
-    if (argc < 6) {
+    if (argc < 5) {
         usage();
         return 1;
     }
@@ -41,6 +41,8 @@ int main(int argc, char* argv[]) {
     args >> series_type >> num_iterations >> frequency >> dump_type;
     if (argc == 6) {
         args >> precision;
+    } else {
+        precision = 10;
     }
 
     // Create the appropriate series object based on the input type

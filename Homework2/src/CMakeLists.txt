@@ -1,4 +1,4 @@
-project(snippet)
+project(cppseries)
 # Gather all source files in the project directory
 file(GLOB SOURCES ${PROJECT_SOURCE_DIR}/*.cc)
 #file(GLOB SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cc")
@@ -10,4 +10,4 @@ foreach(f ${SOURCES})
 endforeach()
 
 # Create an executable with all the source files
-add_executable(snippet ${SOURCES})
+add_executable(cppseries ${SOURCES})
