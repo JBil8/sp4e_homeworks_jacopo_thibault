@@ -8,6 +8,7 @@ This repository contains homework assignments of Jacopo Bilotto and Thibault Ghe
 - [Getting Started](#getting-started)
 - [Homework Assignments](#homework-assignments)
     - [Homework 1](#homework_1)
+    - [Homework 2](#homework_2)
 
 ## Getting Started
 
@@ -26,4 +27,15 @@ Clone the repository :
 Located in the **Homework1** folder.
 
 More details about dependencies and usage are available in the specific [README.md](./Homework1/README.md) file.
+
+### Homework 2
+
+> C++ classes
+
+Located in the **Homework2** folder.
+
+More details about dependencies and usage are available in the specific [README.md](./Homework2/README.md) file.
+
+
+
 
