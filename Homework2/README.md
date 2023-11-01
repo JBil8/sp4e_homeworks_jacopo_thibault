@@ -43,6 +43,16 @@ It is poissible to choose the number of terms used to compute the series, as wel
 - A C++ compiler
 - CMake for building the project
 
+For plotting purposes, a python script `plotData.py` uses the following dependencies:
+- **matplolib**: For plotting and visualizing the results.
+- **pandas**: To handle data written to files as tables.
+
+To install these Python dependencies, you can use the following command:
+
+```bash
+pip install -r requirements.txt
+```
+
 ## Usage
 
 Run the program using the following command structure:
@@ -54,7 +64,7 @@ Run the program using the following command structure:
 ### Arguments
 
 - `<type>`: Type of series to compute. Options are `pi`, `arithmetic`, or `riemann`. 
-    - `pi` ($\pi =\sqrt{ 6\,  \Sigma_{k=1}^N {1 \over k^2}}$)
+    - `pi` ($\pi =\sqrt{ 6  \Sigma_{k=1}^N {1 \over k^2}}$)
     - `arithmetic` ($S_n = \Sigma_{k=1}^N k$)
     - `riemann` ($\int_a^b f(x) dx = \lim_{N \to \infty} \Sigma_{k=1}^N f(x_k) \Delta x$)
 - `<N>`: Number of iteration for pi and arithmetic / Number of discretizations for `riemann`
