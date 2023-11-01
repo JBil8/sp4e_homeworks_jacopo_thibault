@@ -12,10 +12,11 @@
 
 // Function to display usage information
 void usage() {
-    std::cerr << "Usage: ./src/snippet <type> <N> <f> <filename> <dump> [<sep>]" << std::endl;
+    std::cerr << "Usage: ./src/snippet <type> <N> <f> <p> <filename> <dump> [<sep>]" << std::endl;
     std::cerr << "  type: pi or arithmetic" << std::endl;
     std::cerr << "  N: number of iterations" << std::endl;
     std::cerr << "  f: frequency of dumping" << std::endl;
+    std::cerr << "  p: precision of the output" << std::endl;
     std::cerr << "  filename: name of the output file" << std::endl;
     std::cerr << "  dump: print or write" << std::endl;
     std::cerr << "  sep: separator for the output file (optional, default is space)" << std::endl;
@@ -24,13 +25,13 @@ void usage() {
 int main(int argc, char* argv[]) {
 
     // Ensure the correct number of arguments are provided
-    if (argc < 6) {
+    if (argc < 7) {
         usage();
         return 1;
     }
 
     // Parse command line arguments
-    unsigned int num_iterations, frequency;
+    unsigned int num_iterations, frequency, precision;
     std::string series_type, separator, filename, dump_type;
 
     std::stringstream args;
@@ -39,10 +40,10 @@ int main(int argc, char* argv[]) {
         // std::cout << argv[i] << std::endl;
     }
 
-    if (argc == 7) {
-        args >> series_type >> num_iterations >> frequency >> filename >> dump_type >> separator;
+    if (argc == 8) {
+        args >> series_type >> num_iterations >> frequency >> precision >> filename >> dump_type >> separator;
     } else {
-        args >> series_type >> num_iterations >> frequency >> filename >> dump_type;
+        args >> series_type >> num_iterations >> frequency >> precision >> filename >> dump_type;
     }
 
 
@@ -58,15 +59,27 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    std::ofstream file("output.txt");
+
+    // Add the file extension to the filename based on the separator
+    if (separator == ",") {
+            filename += ".csv";
+        } else if (separator == "|") {
+            filename += ".psv";
+        } else {
+            filename += ".txt";
+        }
+
+    std::ofstream file(filename);
 
     // Perform the requested dump operation
     if (dump_type == "print") {
         PrintSeries print_series(*series_object, frequency, num_iterations);
-        print_series.dump(file);
+        print_series.setPrecision(precision);
+        print_series.dump(std::cout);
     } else if (dump_type == "write") {
         WriteSeries write_series(*series_object, num_iterations, filename);
         write_series.setSeparator(separator);
+        write_series.setPrecision(precision);
         write_series.dump(file);
     } else {
         std::cerr << "Unknown dump type: " << dump_type << std::endl;

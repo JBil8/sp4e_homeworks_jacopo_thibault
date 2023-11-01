@@ -18,27 +18,25 @@ void WriteSeries::setSeparator(std::string s) {
 }
 
 
+void WriteSeries::setPrecision(unsigned int precision){
+    this->precision = precision;
+};
+
+
 void WriteSeries::dump(std::ostream &os) {
     
-    // Add the file extension to the filename based on the separator
-    if (separator == ",") {
-            filename += ".csv";
-        } else if (separator == "|") {
-            filename += ".psv";
-        } else {
-            filename += ".txt";
-        }
+    
 
     // Open the file
-    std::ofstream file(filename);
-    if (!file) {
+    //std::ofstream file(filename);
+    if (!os) {
         std::cerr << "Error: Could not open file " << filename << " for writing." << std::endl;
         return;
     }
 
     // Write the series to the file
     double analytic_prediction = series.getAnalyticPrediction();
-    file << "Iterations" << this->separator << "Series_Value" << this->separator << "Analytic_Prediction" << std::endl;
+    os << "Iterations" << this->separator << "Series_Value" << this->separator << "Analytic_Prediction" << std::endl;
     
     /*
     if (!std::isnan(analytic_prediction)) {
@@ -50,22 +48,20 @@ void WriteSeries::dump(std::ostream &os) {
     // set precision
     if (precision) {
         WriteSeries::setPrecision(precision);
-        file << std::setprecision(this->precision);
+        os << std::setprecision(this->precision);
     }
 
     for (int i = 1; i < maxiter+1; i++) {
         double series_value = series.compute(i);
-        file << i << this->separator << series_value << this->separator << analytic_prediction << std::endl;
+        os << i << this->separator << series_value << this->separator << analytic_prediction << std::endl;
     }
 
-    file.close();
+    //os.close();
 
     std::cout << "Series written to file " << filename << std::endl;
 }
 
-void WriteSeries::setPrecision(unsigned int precision){
-    this->precision = precision;
-};
+
 
 
 

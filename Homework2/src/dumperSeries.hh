@@ -5,15 +5,22 @@
 #include <iostream>
 
 class DumperSeries{
+
 public:
-    DumperSeries(Series & series, unsigned int precision) : series(series), precision(4) {}; // Constructor
-    //virtual void dump() = 0;
-    virtual void dump(std::ostream & os) = 0;
-    virtual void setPrecision(unsigned int precision);
+    // Constructor
+    DumperSeries(Series & series, unsigned int precision = 4)
+        : series(series), precision(precision) {}; 
+    // Destructor
     virtual ~DumperSeries() {};
+
 protected:
     Series & series;
     unsigned int precision;
+
+public:
+    virtual void dump(std::ostream & os) = 0;
+    virtual void setPrecision(unsigned int precision);
+
 };
 
 // Non-member function
