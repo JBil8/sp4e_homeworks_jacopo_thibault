@@ -7,7 +7,9 @@
 class PrintSeries: public DumperSeries{
 public:
     PrintSeries(Series & series, int frequency, int maxiter);
-    void dump() override;
+    void dump(std::ostream & os) override;
+    void setPrecision(unsigned int precision) override;
+
 private:
     int frequency;
     int maxiter;

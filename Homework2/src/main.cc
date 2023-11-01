@@ -2,6 +2,7 @@
 #include <string>
 #include <memory>
 #include <sstream>
+#include <fstream>
 #include "series.hh"
 #include "computeArithmetic.hh"
 #include "computePi.hh"
@@ -57,14 +58,16 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
+    std::ofstream file("output.txt");
+
     // Perform the requested dump operation
     if (dump_type == "print") {
         PrintSeries print_series(*series_object, frequency, num_iterations);
-        print_series.dump();
+        print_series.dump(file);
     } else if (dump_type == "write") {
         WriteSeries write_series(*series_object, num_iterations, filename);
         write_series.setSeparator(separator);
-        write_series.dump();
+        write_series.dump(file);
     } else {
         std::cerr << "Unknown dump type: " << dump_type << std::endl;
         usage();

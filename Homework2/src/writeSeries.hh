@@ -8,8 +8,9 @@
 class WriteSeries: public DumperSeries{
 public:
     WriteSeries(Series& series, int maxiter, const std::string& filename); // Constructor
-    void dump() override;
+    void dump(std::ostream &os) override;
     void setSeparator(std::string s);
+    void setPrecision(unsigned int precision) override;
 private:
     int maxiter;
     std::string filename;

@@ -1,6 +1,7 @@
 #include "writeSeries.hh"
 #include <fstream>
 #include <iostream>
+#include <iomanip>
 #include <cmath>
 
 WriteSeries::WriteSeries(Series &series, int maxiter, const std::string& filename) 
@@ -17,7 +18,7 @@ void WriteSeries::setSeparator(std::string s) {
 }
 
 
-void WriteSeries::dump() {
+void WriteSeries::dump(std::ostream &os) {
     
     // Add the file extension to the filename based on the separator
     if (separator == ",") {
@@ -46,6 +47,12 @@ void WriteSeries::dump() {
         file << "Not available" << std::endl;
     }*/
 
+    // set precision
+    if (precision) {
+        WriteSeries::setPrecision(precision);
+        file << std::setprecision(this->precision);
+    }
+
     for (int i = 1; i < maxiter+1; i++) {
         double series_value = series.compute(i);
         file << i << this->separator << series_value << this->separator << analytic_prediction << std::endl;
@@ -55,5 +62,10 @@ void WriteSeries::dump() {
 
     std::cout << "Series written to file " << filename << std::endl;
 }
+
+void WriteSeries::setPrecision(unsigned int precision){
+    this->precision = precision;
+};
+
 
 
