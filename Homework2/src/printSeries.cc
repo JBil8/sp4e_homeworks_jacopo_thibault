@@ -35,6 +35,8 @@ void PrintSeries::dump(std::ostream &os = std::cout)  {
         if (!std::isnan(analytic_prediction)) {
             double convergence = std::abs(series_value - analytic_prediction);
             os << " | Convergence: " << convergence << std::endl;
+        } else {
+            os << std::endl;
         }
     }
 };
