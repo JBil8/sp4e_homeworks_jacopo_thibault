@@ -23,7 +23,6 @@ void usage() {
 }
 
 int main(int argc, char* argv[]) {
-
     // Ensure the correct number of arguments are provided
     if (argc < 7) {
         usage();
@@ -32,20 +31,17 @@ int main(int argc, char* argv[]) {
 
     // Parse command line arguments
     unsigned int num_iterations, frequency, precision;
-    std::string series_type, separator, filename, dump_type;
+    std::string series_type, separator = " ", filename, dump_type;
 
     std::stringstream args;
     for (int i = 1; i < argc; ++i) {
         args << argv[i] << " ";
-        // std::cout << argv[i] << std::endl;
     }
 
+    args >> series_type >> num_iterations >> frequency >> precision >> filename >> dump_type;
     if (argc == 8) {
-        args >> series_type >> num_iterations >> frequency >> precision >> filename >> dump_type >> separator;
-    } else {
-        args >> series_type >> num_iterations >> frequency >> precision >> filename >> dump_type;
+        args >> separator;
     }
-
 
     // Create the appropriate series object based on the input type
     std::shared_ptr<Series> series_object;
