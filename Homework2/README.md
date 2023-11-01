@@ -68,17 +68,17 @@ Note that in some cases, e.g. for Riemann Integral, you will be prompted to ente
 
 1. Compute Pi series and print results to the console:
 ```bash
-./src/snippet pi 1000 10 print
+./src/cppseries pi 1000 10 print
 ```
 
 2. Compute Arithmetic series, write results to a file with a specified precision:
 ```bash
-./src/snippet arithmetic 1000 10 write 5
+./src/cppseries arithmetic 1000 10 write 5
 ```
 
 3. Compute Riemann Integral, write results to a file:
 ```bash
-./src/snippet riemann 1000 10 write
+./src/cppseries riemann 1000 10 write
 ```
 
 
