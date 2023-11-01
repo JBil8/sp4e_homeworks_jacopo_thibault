@@ -10,7 +10,7 @@
 #include "dumperSeries.hh"
 #include "printSeries.hh"
 #include "writeSeries.hh"
-#include "RiemannIntegral.hh"
+#include "riemannIntegral.hh"
 
 // Function to display usage information
 void usage() {

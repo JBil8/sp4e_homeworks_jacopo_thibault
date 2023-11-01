@@ -1,4 +1,4 @@
-#include "RiemannIntegral.hh"
+#include "riemannIntegral.hh"
 
 RiemannIntegral::RiemannIntegral(double a, double b, std::function<double(double)> f)
     : a(a), b(b), f(f) {}
