@@ -15,7 +15,7 @@
 // Function to display usage information
 void usage() {
     std::cerr << "Usage: ./src/snippet <type> <N> <f> <dump> [<p>]" << std::endl;
-    std::cerr << "  type: pi, arithmetic or riemann" << std::endl;
+    std::cerr << "  type: pi, arithmetic, or riemann" << std::endl;
     std::cerr << "  N: number of iterations for pi and arithmetic or number of discretization for riemann" << std::endl;
     std::cerr << "  f: frequency of dumping" << std::endl;
     std::cerr << "  dump: print or write" << std::endl;
@@ -50,7 +50,7 @@ int main(int argc, char* argv[]) {
     } else if (series_type == "arithmetic") {
         series_object = std::make_shared<ComputeArithmetic>();
     } else if (series_type == "riemann") {
-        // Parse the remaining arguments
+        // Parse the remaining arguments for Riemann integral
         double a, b;
         std::string f_type;
 
@@ -59,21 +59,21 @@ int main(int argc, char* argv[]) {
         std::cout <<"Enter the upper bound (b):";
         std::cin >> b;
         std::cout << "Choose the function type ('cubic', 'cos', or 'sin'): ";
-        std::cin >> f_type; 
+        std::cin >> f_type;
 
-        // Define the function
+        // Define the function and its integral
         std::function<double(double)> f;
         std::function<double(double)> integral_f;
-        
+
         if (f_type == "cubic") {
-            f = [](double x) { return 1.0* x * x * x; };
-            integral_f = [](double x) { return pow(x,4)/4 ; };
+            f = [](double x) { return 1.0 * x * x * x; };
+            integral_f = [](double x) { return pow(x, 4) / 4; };
         } else if (f_type == "cos") {
             f = [](double x) { return std::cos(x); };
-            integral_f = [](double x) { return std::sin(x) ; };
+            integral_f = [](double x) { return std::sin(x); };
         } else if (f_type == "sin") {
             f = [](double x) { return std::sin(x); };
-            integral_f = [](double x) { return -1.*std::cos(x) ; };
+            integral_f = [](double x) { return -1.0 * std::cos(x); };
         } else {
             std::cerr << "Unknown function type: " << f_type << std::endl;
             usage();
@@ -86,51 +86,44 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-
     // Perform the requested dump operation
     if (dump_type == "print") {
-
+        // Print the series data
         PrintSeries print_series(*series_object, frequency, num_iterations);
         print_series.setPrecision(precision);
         print_series.dump(std::cout);
-
     } else if (dump_type == "write") {
-
-        // Parse the remaining arguments
-        std::string filename;
+        // Parse the remaining arguments for writing to a file
+        std::string separator;
         std::cout << "Enter the filename for the output file (no extension necessary): ";
         std::cin >> filename;
-
-        std::string separator;
         std::cout << "Enter the separator for the output file (, for .csv, | for .psv or a generic key for default (.txt)): ";
         std::cin >> separator;
-
         std::string plot;
         std::cout << "Do you want to plot the output? (y/n): ";
         std::cin >> plot;
-        
+
         // Add the file extension to the filename based on the separator
         if (separator == ",") {
-                filename += ".csv";
-            } else if (separator == "|") {
-                filename += ".psv";
-            } else {
-                filename += ".txt";
-                separator = " ";
-            }
+            filename += ".csv";
+        } else if (separator == "|") {
+            filename += ".psv";
+        } else {
+            filename += ".txt";
+            separator = " ";
+        }
 
         std::ofstream file(filename);
-
         WriteSeries write_series(*series_object, num_iterations, filename);
         write_series.setSeparator(separator);
         write_series.setPrecision(precision);
         write_series.dump(file);
 
+        // Calling python script to plot data
         if (plot == "y") {
             std::string command = "python3 ../src/plotData.py " + filename;
             system(command.c_str());
         }
-    
     } else {
         std::cerr << "Unknown dump type: " << dump_type << std::endl;
         usage();
