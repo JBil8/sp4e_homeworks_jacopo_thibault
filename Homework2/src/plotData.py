@@ -17,10 +17,10 @@ def read_data(filename):
     return data
 
 def plot_data(data):
-    plt.figure(figsize=(10, 5))
+    plt.figure(figsize=(6, 6))
     
-    plt.plot(data['Iterations'], data['Series_Value'], marker='o', linestyle='-', color='b', label='Series Value')
-    plt.plot(data['Iterations'], data['Analytic_Prediction'], linestyle='-', color='r', label='Analytic Prediction')
+    plt.plot(data['Iterations'], data['Series_Value'], marker='o', linestyle='-', color='b', label='Series Value', markersize=2)
+    plt.plot(data['Iterations'], data['Analytic_Prediction'], linestyle='--', color='r', label='Analytic Prediction')
     
     plt.title('Numerical Results')
     plt.xlabel('Iteration')

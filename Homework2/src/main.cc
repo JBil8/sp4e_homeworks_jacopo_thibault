@@ -24,7 +24,7 @@ void usage() {
 
 int main(int argc, char* argv[]) {
     // Ensure the correct number of arguments are provided
-    if (argc < 6) {
+    if (argc < 5) {
         usage();
         return 1;
     }
@@ -38,8 +38,8 @@ int main(int argc, char* argv[]) {
         args << argv[i] << " ";
     }
 
-    args >> series_type >> num_iterations >> frequency >> filename >> dump_type;
-    if (argc == 7) {
+    args >> series_type >> num_iterations >> frequency >> dump_type;
+    if (argc == 5) {
         args >> precision;
     }
 
@@ -99,6 +99,10 @@ int main(int argc, char* argv[]) {
         std::string separator;
         std::cout << "Enter the separator for the output file (, for .csv, | for .psv or a generic key for default (.txt)): ";
         std::cin >> separator;
+
+        std::string plot;
+        std::cout << "Do you want to plot the output? (y/n): ";
+        std::cin >> plot;
         
         // Add the file extension to the filename based on the separator
         if (separator == ",") {
@@ -116,6 +120,11 @@ int main(int argc, char* argv[]) {
         write_series.setSeparator(separator);
         write_series.setPrecision(precision);
         write_series.dump(file);
+
+        if (plot == "y") {
+            std::string command = "python3 ../src/plotData.py " + filename;
+            system(command.c_str());
+        }
     
     } else {
         std::cerr << "Unknown dump type: " << dump_type << std::endl;
