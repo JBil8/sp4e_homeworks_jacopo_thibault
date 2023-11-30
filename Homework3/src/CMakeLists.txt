@@ -4,6 +4,9 @@ project (Particles)
 
 set(CMAKE_CXX_STANDARD 14)
 
+# Add an option for the user to enable/disable FFT part
+option(ENABLE_FFT "Enable FFT support" ON)
+
 ################################################################
 # libpart
 ################################################################
@@ -32,6 +35,7 @@ add_library(part
   material_points_factory.cc 
   )
 
+
 add_executable(particles main.cc)
 target_link_libraries(particles gtest_main gtest pthread part)
 
@@ -40,9 +44,11 @@ message("the project dir = ${PROJECT_SOURCE_DIR}")
 if(EXISTS "${PROJECT_SOURCE_DIR}/googletest/CMakeLists.txt")
   add_subdirectory(googletest)
   add_executable(test_kepler test_kepler.cc)
-  add_executable(test_fft test_fft.cc)
   target_link_libraries(test_kepler part gtest_main gtest pthread )
-  target_link_libraries(test_fft part gtest_main gtest pthread ${FFTW_LIBRARIES})
+  if(ENABLE_FFT)
+    add_executable(test_fft test_fft.cc)
+    target_link_libraries(test_fft part gtest_main gtest pthread ${FFTW_LIBRARIES})
+  endif()
   add_custom_target(test ./test_kepler && ./test_fft DEPENDS part test_kepler test_fft)
 else()
   message("
