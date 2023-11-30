@@ -35,6 +35,8 @@ add_library(part
 add_executable(particles main.cc)
 target_link_libraries(particles gtest_main gtest pthread part)
 
+message("the project dir = ${PROJECT_SOURCE_DIR}")
+
 if(EXISTS "${PROJECT_SOURCE_DIR}/googletest/CMakeLists.txt")
   add_subdirectory(googletest)
   add_executable(test_kepler test_kepler.cc)
