@@ -4,9 +4,6 @@ project (Particles)
 
 set(CMAKE_CXX_STANDARD 14)
 
-# Add an option for the user to enable/disable FFT part
-option(ENABLE_FFT "Enable FFT support" ON)
-
 ################################################################
 # libpart
 ################################################################
@@ -36,19 +33,53 @@ add_library(part
   )
 
 
-add_executable(particles main.cc)
-target_link_libraries(particles gtest_main gtest pthread part)
+################################################################
+# Check for FFTW lib
+################################################################
 
-message("the project dir = ${PROJECT_SOURCE_DIR}")
+
+option(ENABLE_FFT "Enable FFT support" ON)
+if(ENABLE_FFT)
+message(STATUS "Searching for FFTW3 library. If something goes wrong, try specifying the CMake variable FFTW_USER_PATH.")
+
+if(FFTW_USER_PATH)
+set(FFTW_PATH ${FFTW_USER_PATH})
+else(FFTW_USER_PATH)
+set(FFTW_PATH /usr/local)
+endif(FFTW_USER_PATH)
+
+# Look for the library (includes and .so/.a)
+# headers
+find_file(FFTW_H fftw3.h ${FFTW_PATH}/include)
+get_filename_component(FFTW_INCLUDES ${FFTW_H} DIRECTORY)
+if(FFTW_INCLUDES)
+    message(STATUS "fftw3.h found in ${FFTW_INCLUDES}")
+endif(FFTW_INCLUDES)
+include_directories(${FFTW_INCLUDES})
+# library
+find_library(FFTW_LIB libfftw3.a ${FFTW_PATH}/lib)
+if(FFTW_LIB)
+    message(STATUS "Library found in ${FFTW_LIB}")
+endif(FFTW_LIB)
+
+# Add executable and link it
+add_executable(particles main.cc)
+target_link_libraries(particles part ${FFTW_LIB})
+
+else(ENABLE_FFT)
+message(FATAL_ERROR "FFTW is required for this project.")
+endif()
+
+################################################################
+# Google test
+################################################################
 
 if(EXISTS "${PROJECT_SOURCE_DIR}/googletest/CMakeLists.txt")
   add_subdirectory(googletest)
   add_executable(test_kepler test_kepler.cc)
+  add_executable(test_fft test_fft.cc)
   target_link_libraries(test_kepler part gtest_main gtest pthread )
-  if(ENABLE_FFT)
-    add_executable(test_fft test_fft.cc)
-    target_link_libraries(test_fft part gtest_main gtest pthread ${FFTW_LIBRARIES})
-  endif()
+  target_link_libraries(test_fft part gtest_main gtest pthread ${FFTW_LIB})
   add_custom_target(test ./test_kepler && ./test_fft DEPENDS part test_kepler test_fft)
 else()
   message("
