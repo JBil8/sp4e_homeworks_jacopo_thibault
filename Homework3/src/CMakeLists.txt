@@ -82,13 +82,12 @@ if(EXISTS "${PROJECT_SOURCE_DIR}/googletest/CMakeLists.txt")
   target_link_libraries(test_fft part gtest_main gtest pthread ${FFTW_LIB})
   add_custom_target(test ./test_kepler && ./test_fft DEPENDS part test_kepler test_fft)
 else()
-  message("
-*********************************************
-google tests is missing. 
-Did you forget `git submodule update --init`
-*********************************************
+  message(FATAL_ERROR "
+    *********************************************
+    google tests is missing. 
+    Did you forget `git submodule update --init`
+    *********************************************
 ")
-  message(FATAL_ERROR "exit")
 endif()
 ################################################################
 # Doxygen
