@@ -34,5 +34,28 @@ TEST(FFT, transform) {
 }
 /*****************************************************************/
 
-TEST(FFT, inverse_transform) {}
+TEST(FFT, inverse_transform) {
+  UInt N = 512;
+  Matrix<complex> m(N);
+
+  Real k = 2 * M_PI / N;
+  for (auto&& entry : index(m)) {
+    int i = std::get<0>(entry);
+    int j = std::get<1>(entry);
+    auto& val = std::get<2>(entry);
+    val = cos(k * i);
+  }
+
+  Matrix<complex> transformed = FFT::transform(m);
+  Matrix<complex> result = FFT::itransform(transformed);
+
+  for (auto&& entry : index(result)) {
+    int i = std::get<0>(entry);
+    int j = std::get<1>(entry);
+    auto& val = std::get<2>(entry);
+
+    ASSERT_NEAR(std::abs(val), std::abs(m(i, j)), 1e-10);
+  }
+}
+
 /*****************************************************************/
