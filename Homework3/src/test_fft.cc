@@ -3,6 +3,7 @@
 #include <gtest/gtest.h>
 
 /*****************************************************************/
+
 TEST(FFT, transform) {
   UInt N = 512;
   Matrix<complex> m(N);
@@ -59,11 +60,10 @@ TEST(FFT, inverse_transform) {
 }
 
 /*****************************************************************/
+
 TEST(FFT, compute_frequencies) {
   UInt N = 4;
-  UInt ii;
-  UInt jj;
-
+  
   Matrix<std::complex<int>> res = FFT::computeFrequencies(N);
   Matrix<Real> q(N);
 

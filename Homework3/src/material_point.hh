@@ -16,11 +16,13 @@ public:
   void initself(std::istream& sstr) override;
 
   Real & getTemperature(){return temperature;};
-  Real & getHeatRate(){return heat_rate;};
+  Real & getTemperatureRate(){return temperature_rate;};
+  Real & getHeatSource(){return heat_source;};
   
 private:
   Real temperature;
-  Real heat_rate;
+  Real temperature_rate;
+  Real heat_source;
 };
 
 /* -------------------------------------------------------------------------- */

@@ -3,12 +3,12 @@
 /* -------------------------------------------------------------------------- */
 void MaterialPoint::printself(std::ostream& stream) const {
   Particle::printself(stream);
-  stream << " " << temperature << " " << heat_rate;
+  stream << " " << temperature << " " << temperature_rate << " " << heat_source;
 }
 
 /* -------------------------------------------------------------------------- */
 
 void MaterialPoint::initself(std::istream& sstr) {
   Particle::initself(sstr);
-  sstr >> temperature  >> heat_rate;;
+  sstr >> temperature  >> temperature_rate >>heat_source;;
 }
