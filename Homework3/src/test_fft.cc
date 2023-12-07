@@ -59,3 +59,34 @@ TEST(FFT, inverse_transform) {
 }
 
 /*****************************************************************/
+TEST(FFT, compute_frequencies) {
+  UInt N = 4;
+  UInt ii;
+  UInt jj;
+
+  Matrix<std::complex<int>> res = FFT::computeFrequencies(N);
+  Matrix<Real> q(N);
+
+  for (UInt i = 0; i < N; ++i) {
+      for (UInt j = 0; j < N; ++j) {
+          q(i, j) = pow(res(i, j).real(), 2) + pow(res(i, j).imag(), 2);
+      }
+  }
+
+  ASSERT_NEAR(q(0, 0), 0.0, 1e-10);
+  ASSERT_NEAR(q(0, 1), 1.0, 1e-10);
+  ASSERT_NEAR(q(0, 2), 4.0, 1e-10);
+  ASSERT_NEAR(q(0, 3), 1.0, 1e-10);
+
+  ASSERT_NEAR(q(1, 1), 2.0, 1e-10);
+  ASSERT_NEAR(q(1, 2), 5.0, 1e-10);
+  ASSERT_NEAR(q(1, 3), 2.0, 1e-10);
+
+  ASSERT_NEAR(q(2, 2), 8.0, 1e-10);
+  ASSERT_NEAR(q(2, 3), 5.0, 1e-10);
+
+  ASSERT_NEAR(q(3, 3), 2.0, 1e-10);
+
+}
+
+/*****************************************************************/
