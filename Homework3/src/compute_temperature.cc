@@ -23,6 +23,10 @@ void ComputeTemperature::compute(System& system) {
     Matrix<complex> temp(size);
     Matrix<complex> heat_source(size);
     Matrix<complex> temp_rate_fft(size);
+    Matrix<complex> temp_fft(size);
+    Matrix<complex> heat_source_fft(size); 
+    Matrix<complex> temp_rate(size);
+
 
     int i = 0;
     int j = 0;
@@ -39,8 +43,8 @@ void ComputeTemperature::compute(System& system) {
         }
     }
 
-    Matrix<complex> temp_fft = FFT::transform(temp); 
-    Matrix<complex> heat_source_fft = FFT::transform(heat_source);
+    temp_fft = FFT::transform(temp); 
+    heat_source_fft = FFT::transform(heat_source);
 
     auto q = FFT::computeFrequencies(N);
 
@@ -53,11 +57,22 @@ void ComputeTemperature::compute(System& system) {
         val *= 1/(density * heat_capacity);
     }
 
-    Matrix<complex> temp_rate = FFT::itransform(temp_rate_fft);
-
+    temp_rate = FFT::itransform(temp_rate_fft);
     
 
-    //mp.getTemperature() += mp.getHeatRate() * dt;
+    int k = 0;
+    int l = 0;
+    for (auto& par : system) {
+        auto& mp = dynamic_cast<MaterialPoint&>(par);
+
+        mp.getTemperature() = temp(k, l).real() + temp_rate(k, l).real() * this->dt;
+
+        l++;
+        if (l == N) {
+            l = 0;
+            k++;
+        }
+    }
 
 
 }
