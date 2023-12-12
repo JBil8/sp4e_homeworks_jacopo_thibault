@@ -4,13 +4,13 @@ import matplotlib.pyplot as plt
 
 def arg_parser():
     parser = argparse.ArgumentParser(description='Generate heat distribution')
-    parser.add_argument('--num', type=int, default=1600,
+    parser.add_argument('--num', action='store', type=int, default=1600,
                         help='number of particles (--num should be a squared number)')
     parser.add_argument('--xlim', action='store', type=float, default=[-1.,1.], nargs='+', 
                         help='Upper and lower limits for the x axis')
     parser.add_argument('--ylim', action='store', type=float, default=[-1.,1.], nargs='+',
                         help='Upper and lower limits for the y axis')
-    parser.add_argument('--filename', type=str, default='input.csv',
+    parser.add_argument('--filename', type=str, default='input_mp.csv',
                         help='Output filename')
     parser.add_argument('--plot', action='store_true', help="Plots the heat distribution")
     args = parser.parse_args()
@@ -75,7 +75,7 @@ if __name__ == '__main__':
             i += 1
 
     file_data = np.hstack((positions, velocity, force, masses, temperature, heat_source))
-    np.savetxt(filename, file_data, delimiter=" ")
+    np.savetxt("build/" + filename, file_data, delimiter=" ")
 
     if plot:
         plot_temperature(num, temperature, x_lim, y_lim)

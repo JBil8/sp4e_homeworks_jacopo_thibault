@@ -36,6 +36,7 @@ mkdir build
 cd build
 cmake ..
 make
+mkdir dumps
 ```
 ---
 
@@ -99,16 +100,16 @@ Run the program using the following command structure:
 
 To launch a simulation for a grid composed of 512*512 particles, with 1000 iterations, dumping every 100 timesteps, and with a timestep of 0.1 :
 
-1. Create the input file
+1. Create the input file and plot the heat distribution
 
 ```bash
-IMPLEMENT THE CODE
+./src/python3 generate_heat_distribution.py --num 262144 --xlim -1 1 --ylim -1 1 --filename input_mp.csv --plot  
 ```
 
 2. Launch the simulation
 
 ```bash
-./src/build/particles 1000 100 input.csv material_point 0.1
+./src/build/particles 1000 100 input_mp.csv material_point 0.1
 ```
 
 3. Visualize the results with paraview

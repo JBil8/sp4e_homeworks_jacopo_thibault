@@ -10,5 +10,5 @@ void MaterialPoint::printself(std::ostream& stream) const {
 
 void MaterialPoint::initself(std::istream& sstr) {
   Particle::initself(sstr);
-  sstr >> temperature  >> heat_source;
+  sstr >> temperature >> heat_source;
 }
