@@ -36,6 +36,15 @@ Located in the **Homework2** folder.
 
 More details about dependencies and usage are available in the specific [README.md](./Homework2/README.md) file.
 
+### Homework 3
+
+> Heat Equation Solver
+
+Located in the **Homework2** folder.
+
+More details about dependencies and usage are available in the specific [README.md](./Homework3/README.md) file.
+
+
 
 
 

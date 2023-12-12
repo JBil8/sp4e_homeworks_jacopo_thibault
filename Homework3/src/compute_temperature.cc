@@ -1,7 +1,7 @@
-#include "compute_temperature.hh"
 #include "fft.hh"
 #include "material_point.hh"
 #include "system.hh"
+#include "compute_temperature.hh"
 #include <cmath>
 
 /* -------------------------------------------------------------------------- */
@@ -42,13 +42,17 @@ void ComputeTemperature::compute(System& system) {
         }
     }
 
+    // FFT
     temp_fft = FFT::transform(temp); 
     heat_source_fft = FFT::transform(heat_source);
     // printing temperature fft
 
 
 
+    // Frequencies
     auto q = FFT::computeFrequencies(N);
+    q /= (N*N);
+
 
     for (auto&& entry : index(temp_rate_fft)) {
         int i = std::get<0>(entry);
@@ -59,6 +63,7 @@ void ComputeTemperature::compute(System& system) {
         val *= 1/(density * heat_capacity);
     }
 
+    // Inverse FFT
     temp_rate = FFT::itransform(temp_rate_fft);
     
 

@@ -61,7 +61,7 @@ TEST_F(InitialConditions, homogeneous) {
     temperature->compute(system);
     for (UInt i = 0; i < N; ++i) {
         MaterialPoint &p = static_cast<MaterialPoint&>(system.getParticle(i));
-        ASSERT_NEAR(0.1, p.getTemperature(), 1e-10);
+        ASSERT_NEAR(1.0, p.getTemperature(), 1e-10);
     }
 }
 
@@ -75,7 +75,7 @@ TEST_F(InitialConditions, volumetric_heat_source) {
 
     for (UInt i = 0; i < sqrt(N); ++i) {
         for (UInt j = 0; j < sqrt(N); ++j) {
-            MaterialPoint &p = dynamic_cast<MaterialPoint&>(system.getParticle(i*sqrt(N) + j));
+            MaterialPoint &p = static_cast<MaterialPoint&>(system.getParticle(i*sqrt(N) + j));
             p.getPosition()[0] = x_min + (x_max - x_min) / sqrt(N) * i;
             //p.getPosition()[1] = y_min + (y_max - y_min) / sqrt(N) * j;
             p.getTemperature() = sin(2*M_PI*p.getPosition()[0]/(x_max - x_min));
@@ -97,7 +97,7 @@ TEST_F(InitialConditions, volumetric_heat_source) {
 
     for (UInt i = 0; i < sqrt(N); ++i) {
         for (UInt j = 0; j < sqrt(N); ++j) {
-            MaterialPoint &p = dynamic_cast<MaterialPoint&>(system.getParticle(i*sqrt(N) + j));
+            MaterialPoint &p = static_cast<MaterialPoint&>(system.getParticle(i*sqrt(N) + j));
             ASSERT_NEAR(p.getTemperature(), sin(2*M_PI*p.getPosition()[0]/(x_max - x_min)), 1e-5);
         }
     }
