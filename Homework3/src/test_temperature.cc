@@ -13,12 +13,12 @@ class InitialConditions : public ::testing::Test {
 protected:
     void SetUp() override {
 
-        N = 144;
+        nb_particles = 144;
         dt = 0.1;
 
         // Initialize the points 
         std::vector<MaterialPoint> points;
-        for (UInt i = 0; i < N; ++i) {
+        for (UInt i = 0; i < nb_particles; ++i) {
             MaterialPoint p;
             p.getTemperature() = 0.0;
             p.getHeatSource() = 0.0;
@@ -34,7 +34,7 @@ protected:
     }
 
     System system;
-    UInt N;
+    UInt nb_particles;
     double dt;
     std::shared_ptr<ComputeTemperature> temperature;
 
@@ -44,22 +44,15 @@ protected:
 
 TEST_F(InitialConditions, homogeneous) {
 
-    for (UInt i = 0; i < N; ++i) {
+    for (UInt i = 0; i < nb_particles; ++i) {
         MaterialPoint &p = static_cast<MaterialPoint&>(system.getParticle(i));
-        p.getTemperature() = 0.1;
-    }
+        p.getTemperature() = 1.0;
+        p.getHeatSource() = 0;
+    }    
 
-    Matrix<complex> heat_source(N);
-    // initialize heat source to zero both real and imaginary parts
-    for (auto &&entry : index(heat_source)) {
-        auto &val = std::get<2>(entry);
-        val = 0.0;
-    } 
-    
-
-    temperature = std::make_shared<ComputeTemperature>(dt, 1.0, 1.0, 1.0, heat_source);
+    temperature = std::make_shared<ComputeTemperature>(dt, 1.0, 1.0, 1.0);
     temperature->compute(system);
-    for (UInt i = 0; i < N; ++i) {
+    for (UInt i = 0; i < nb_particles; ++i) {
         MaterialPoint &p = static_cast<MaterialPoint&>(system.getParticle(i));
         ASSERT_NEAR(1.0, p.getTemperature(), 1e-10);
     }
@@ -73,16 +66,16 @@ TEST_F(InitialConditions, volumetric_heat_source) {
     y_min = -1.0;
     y_max = 1.0;
 
-    for (UInt i = 0; i < sqrt(N); ++i) {
-        for (UInt j = 0; j < sqrt(N); ++j) {
-            MaterialPoint &p = static_cast<MaterialPoint&>(system.getParticle(i*sqrt(N) + j));
-            p.getPosition()[0] = x_min + (x_max - x_min) / sqrt(N) * i;
+    for (UInt i = 0; i < sqrt(nb_particles); ++i) {
+        for (UInt j = 0; j < sqrt(nb_particles); ++j) {
+            MaterialPoint &p = static_cast<MaterialPoint&>(system.getParticle(i*sqrt(nb_particles) + j));
+            p.getPosition()[0] = x_min + (x_max - x_min) / sqrt(nb_particles) * i;
             //p.getPosition()[1] = y_min + (y_max - y_min) / sqrt(N) * j;
             p.getTemperature() = sin(2*M_PI*p.getPosition()[0]/(x_max - x_min));
         }
     }
 
-    Matrix<complex> heat_source(N);
+    Matrix<complex> heat_source(sqrt(nb_particles));
     Real scalar_factor = pow(2*M_PI/(x_max-x_min), 2) ;
     for (auto&& entry : index(heat_source)) {
         //assign value of sin similar to initial temperature distribution defined above
@@ -92,12 +85,12 @@ TEST_F(InitialConditions, volumetric_heat_source) {
         val = scalar_factor* sin(2*M_PI*i/(x_max-x_min));
         }
 
-    temperature = std::make_shared<ComputeTemperature>(dt, 1.0, 1.0, 1.0, heat_source);
+    temperature = std::make_shared<ComputeTemperature>(dt, 1.0, 1.0, 1.0);
     temperature->compute(system);
 
-    for (UInt i = 0; i < sqrt(N); ++i) {
-        for (UInt j = 0; j < sqrt(N); ++j) {
-            MaterialPoint &p = static_cast<MaterialPoint&>(system.getParticle(i*sqrt(N) + j));
+    for (UInt i = 0; i < sqrt(nb_particles); ++i) {
+        for (UInt j = 0; j < sqrt(nb_particles); ++j) {
+            MaterialPoint &p = static_cast<MaterialPoint&>(system.getParticle(i*sqrt(nb_particles) + j));
             ASSERT_NEAR(p.getTemperature(), sin(2*M_PI*p.getPosition()[0]/(x_max - x_min)), 1e-5);
         }
     }

@@ -12,7 +12,7 @@ class ComputeTemperature : public Compute {
   // Virtual implementation
 public:
   // Constructor
-  ComputeTemperature(Real timestep, Real heat_conductivity, Real density, Real heat_capacity, Matrix<complex> heat_source);
+  ComputeTemperature(Real timestep, Real heat_conductivity, Real density, Real heat_capacity);
 
 public:
   //! Set time step

@@ -29,7 +29,7 @@ MaterialPointsFactory::createSimulation(const std::string& fname,
   if (side * side != N)
     throw std::runtime_error("number of particles is not square");
 
-  auto temperature = std::make_shared<ComputeTemperature>(timestep, 1, 1, 1, Matrix<complex>(side));
+  auto temperature = std::make_shared<ComputeTemperature>(timestep, 1, 1, 1);
   this->system_evolution->addCompute(temperature);
 
   return *system_evolution;

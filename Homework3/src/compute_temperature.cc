@@ -6,8 +6,8 @@
 
 /* -------------------------------------------------------------------------- */
 
-ComputeTemperature::ComputeTemperature(Real timestep, Real heat_conductivity, Real density, Real heat_capacity, Matrix<complex> heat_source)
-    : dt(timestep), heat_conductivity(heat_conductivity), density(density), heat_capacity(heat_capacity), heat_source(heat_source) {}
+ComputeTemperature::ComputeTemperature(Real timestep, Real heat_conductivity, Real density, Real heat_capacity)
+    : dt(timestep), heat_conductivity(heat_conductivity), density(density), heat_capacity(heat_capacity) {}
 
 /* -------------------------------------------------------------------------- */
 
@@ -19,12 +19,12 @@ void ComputeTemperature::compute(System& system) {
     UInt size = system.getNbParticles();
     UInt N = std::sqrt(size);
 
-    Matrix<complex> temp(size);
-    Matrix<complex> heat_source(size);
-    Matrix<complex> temp_rate_fft(size);
-    Matrix<complex> temp_fft(size);
-    Matrix<complex> heat_source_fft(size); 
-    Matrix<complex> temp_rate(size);
+    Matrix<complex> temp(N);
+    Matrix<complex> heat_source(N);
+    Matrix<complex> temp_rate_fft(N);
+    Matrix<complex> temp_fft(N);
+    Matrix<complex> heat_source_fft(N); 
+    Matrix<complex> temp_rate(N);
 
 
     int i = 0;
@@ -34,7 +34,7 @@ void ComputeTemperature::compute(System& system) {
 
         temp(i, j).real(mp.getTemperature());
         heat_source(i, j).real(mp.getHeatSource());
-
+        
         j++;
         if (j == N) {
             j = 0;
@@ -42,11 +42,10 @@ void ComputeTemperature::compute(System& system) {
         }
     }
 
+
     // FFT
     temp_fft = FFT::transform(temp); 
     heat_source_fft = FFT::transform(heat_source);
-    // printing temperature fft
-
 
 
     // Frequencies
