@@ -47,7 +47,9 @@ mkdir dumps
 - [Paraview](https://www.paraview.org/download/) for visualization.
 
 For checking purposes, a python script `computeFftFreq.py` uses the following dependencies:
-- **numpy**: To use numpy.fft, a submodule of NumPy used for computing fast Fourier transforms
+- **numpy**
+- **argparse**
+- **matplotlib**
 
 To install these Python dependencies, you can use the following command:
 
@@ -82,7 +84,7 @@ Doxyfile is included in the directory, therefore the documentation can be genera
 
 # Usage
 
-Run the program using the following command structure:
+After creating the input file, run the program using the following command structure:
 
 ```bash
 ./src/build/particles <n_steps> <dump_freq> input.csv <particle_type> <timestep>
@@ -113,9 +115,23 @@ To launch a simulation for a grid composed of 512*512 particles, with 1000 itera
 ```
 
 3. Visualize the results with paraview
+
+- First, launch paraview
 ```bash
-ADD THE CODE
+paraview ./src/build/dumps
 ```
+- File > Open > "step-..csv" > CSV Reader
+- From the properties window :
+    - Unselect "Have Headers"
+    - Modify "Field Delimiter Characters" from "," to " "
+    - Apply the changes
+- By pressing Ctrl + Space, type "Table to Points". Press enter.
+- In the properties window :
+    - Set X, Y and Z to Field 0, 1 and 2
+    - Select "2D Points"
+    - Apply the changes
+- Select 2D on the visualization window
+- Back into the porperties window, change the colors to Field 13 and press play.s
 
 ---
 # Questions

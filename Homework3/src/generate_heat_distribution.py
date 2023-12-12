@@ -69,7 +69,7 @@ if __name__ == '__main__':
         for y in y_vals:
             positions[i] = [x, y, 0]
             temperature[i] = compute_temperature(x, y, x_lim, y_lim)
-            temperature_rate[i] = 0
+            temperature_rate[i] = 1
             heat_source[i] = compute_heat_source(x, y, x_lim, y_lim)
 
             i += 1
