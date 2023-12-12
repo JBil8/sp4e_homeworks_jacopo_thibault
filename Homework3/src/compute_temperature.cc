@@ -1,7 +1,6 @@
 #include "compute_temperature.hh"
 #include "fft.hh"
 #include "material_point.hh"
-#include "compute_temperature.hh"
 #include "system.hh"
 #include <cmath>
 
@@ -45,6 +44,9 @@ void ComputeTemperature::compute(System& system) {
 
     temp_fft = FFT::transform(temp); 
     heat_source_fft = FFT::transform(heat_source);
+    // printing temperature fft
+
+
 
     auto q = FFT::computeFrequencies(N);
 

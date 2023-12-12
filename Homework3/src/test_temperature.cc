@@ -3,8 +3,8 @@
 #include "system.hh"
 #include "matrix.hh"
 #include "material_point.hh"
-#include "my_types.hh"
-#include <cmath>
+#include "material_points_factory.hh"
+//#include "my_types.hh"
 #include <gtest/gtest.h>
 
 /*****************************************************************/
@@ -13,15 +13,17 @@ class InitialConditions : public ::testing::Test {
 protected:
     void SetUp() override {
 
-        N = 100;
+        N = 144;
         dt = 0.1;
 
         // Initialize the points 
         std::vector<MaterialPoint> points;
-            for (UInt i = 0; i < N; ++i) {
-                MaterialPoint p;
-                p.getTemperature() = 1.0;
-                points.push_back(p);
+        for (UInt i = 0; i < N; ++i) {
+            MaterialPoint p;
+            p.getTemperature() = 0.0;
+            p.getHeatSource() = 0.0;
+            p.getTemperatureRate() = 0.0;
+            points.push_back(p);
             }
 
         // Add particles to system
@@ -36,7 +38,6 @@ protected:
     double dt;
     std::shared_ptr<ComputeTemperature> temperature;
 
-  
 };
 
 /*****************************************************************/
@@ -44,21 +45,23 @@ protected:
 TEST_F(InitialConditions, homogeneous) {
 
     for (UInt i = 0; i < N; ++i) {
-        MaterialPoint &p = dynamic_cast<MaterialPoint&>(system.getParticle(i));
-        p.getTemperature() = 0.0;
+        MaterialPoint &p = static_cast<MaterialPoint&>(system.getParticle(i));
+        p.getTemperature() = 0.1;
     }
 
     Matrix<complex> heat_source(N);
-    for (auto&& entry : index(heat_source)) {
-            auto& val = std::get<2>(entry);
-            val = 0.0;
-        }
+    // initialize heat source to zero both real and imaginary parts
+    for (auto &&entry : index(heat_source)) {
+        auto &val = std::get<2>(entry);
+        val = 0.0;
+    } 
+    
 
     temperature = std::make_shared<ComputeTemperature>(dt, 1.0, 1.0, 1.0, heat_source);
     temperature->compute(system);
     for (UInt i = 0; i < N; ++i) {
-        MaterialPoint &p = dynamic_cast<MaterialPoint&>(system.getParticle(i));
-        ASSERT_NEAR(0.0, p.getTemperature(), 1e-10);
+        MaterialPoint &p = static_cast<MaterialPoint&>(system.getParticle(i));
+        ASSERT_NEAR(0.1, p.getTemperature(), 1e-10);
     }
 }
 

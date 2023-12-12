@@ -82,7 +82,7 @@ if(EXISTS "${PROJECT_SOURCE_DIR}/googletest/CMakeLists.txt")
   target_link_libraries(test_kepler part gtest_main gtest pthread )
   target_link_libraries(test_temperature part gtest_main gtest pthread ${FFTW_LIB} )
   target_link_libraries(test_fft part gtest_main gtest pthread ${FFTW_LIB})
-  add_custom_target(test ./test_kepler && ./test_fft && test_temperature DEPENDS part test_kepler test_fft test_temperature)
+  add_custom_target(test ./test_kepler && ./test_fft && ./test_temperature DEPENDS part test_kepler test_fft test_temperature)
 else()
   message(FATAL_ERROR "
     *********************************************
