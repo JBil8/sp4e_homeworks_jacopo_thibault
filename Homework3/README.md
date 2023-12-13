@@ -1,4 +1,4 @@
-# Week 11 - Homework : Application to a heat equation solver
+R# Week 11 - Homework : Application to a heat equation solver
 
 This code uses the library [FFTW](http://fftw.org/) to code an efficient [heat equation](https://en.wikipedia.org/wiki/Heat_equation) solver.
 
@@ -34,7 +34,7 @@ git submodule update
 ```bash
 mkdir build
 cd build
-cmake ..
+cmake ../src
 make
 mkdir dumps
 ```
@@ -108,18 +108,18 @@ python ../src/generate_heat_distribution.py --num <n_grid_points> --xlim <inferi
 
 #### Examples
 
-To launch a simulation for a grid composed of 512*512 particles, with 1000 iterations, dumping every 100 timesteps, and with a timestep of 0.1 :
+To launch a simulation for a grid composed of 512*512 particles, with 100 iterations, dumping every 10 timesteps, and with a timestep of 0.1 :
 
-1. Create the input file and plot the heat distribution
+1. Create the input file and plot the heat distribution (512*512 = 262144 will be the number --num of particles)
 
 ```bash
-./src/python3 generate_heat_distribution.py --num 262144 --xlim -1 1 --ylim -1 1 --filename input_mp.csv --plot  
+python3 ../src/generate_heat_distribution.py --num 262144 --xlim -1 1 --ylim -1 1 --filename input_mp.csv --plot  
 ```
 
 2. Launch the simulation from the `build` directory
 
 ```bash
-./particles 1000 100 input_mp.csv material_point 0.1
+./particles 100 10 input_mp.csv material_point 0.1
 ```
 
 3. Visualize the results with paraview
@@ -136,10 +136,10 @@ paraview ./dumps
 - By pressing Ctrl + Space, type "Table to Points". Press enter.
 - In the properties window :
     - Set X, Y and Z to Field 0, 1 and 2
-    - Select "2D Points"
     - Apply the changes
-- Select 2D on the visualization window
-- Back into the porperties window, change the colors to Field 13 to get the temperature and press play.
+- Click on the visualization window "Layout 1" and then click on show (eye icon) on TableToPoints1 from the PipelineBrowser
+- Back into the porperties window, change the colors from "Solid Color" to "Field 13" to get the temperature and press play.
+- You might have to rescale the colorscale to see the evolution of temperature correctly.
 
 You can observe below the result  of this simulation :
 
