@@ -1,6 +1,7 @@
 import argparse
 import numpy as np
 import matplotlib.pyplot as plt
+import os
 
 def arg_parser():
     parser = argparse.ArgumentParser(description='Generate heat distribution')
@@ -35,9 +36,6 @@ def plot_temperature(num, temperature, x_lim, y_lim):
     plt.ylabel('Y')
     plt.title('Temperature Heatmap')
     plt.show()
-
-
-
 
 if __name__ == '__main__':
     
@@ -75,7 +73,11 @@ if __name__ == '__main__':
             i += 1
 
     file_data = np.hstack((positions, velocity, force, masses, temperature, heat_source))
-    np.savetxt("build/" + filename, file_data, delimiter=" ")
+    #check if you are in the /build directory
+    if os.path.basename(os.getcwd()) != 'build':
+        raise ValueError('You should be in the build directory')
+ 
+    np.savetxt(os.getcwd() + '/' + filename, file_data, delimiter=" ")
 
     if plot:
         plot_temperature(num, temperature, x_lim, y_lim)
