@@ -50,7 +50,16 @@ void ComputeTemperature::compute(System& system) {
 
     // Frequencies
     auto q = FFT::computeFrequencies(N);
-    q /= (N*N);
+
+    Real NN = (Real) N*N;
+    for (auto&& entry : index(q)) {
+        int i = std::get<0>(entry);
+        int j = std::get<1>(entry);
+        auto& val = std::get<2>(entry);
+
+        val /= NN;
+    }
+
 
 
     for (auto&& entry : index(temp_rate_fft)) {
