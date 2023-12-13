@@ -73,9 +73,9 @@ with $\hat\theta$ the Fourier transform of $\theta$, and $q_x$ and $q_y$ the coo
 
 ## Structure of the particles code
 
-The code uses a factory design pattern for the different types of particles supported and their respective interface ![Factory design for particles](inherit_graph_7.png)
-![Factory design for particles interfaces](inherit_graph_8.png)
-and a similar one for the computes ![Factory design for computes](inherit_graph_0.png)
+The code uses a factory design pattern for the different types of particles supported and their respective interface ![Factory design for particles](images/inherit_graph_7.png)
+![Factory design for particles interfaces](images/inherit_graph_8.png)
+and a similar one for the computes ![Factory design for computes](images/inherit_graph_0.png)
 
 The Doxyfile can be generated with 
 ```
@@ -141,4 +141,8 @@ paraview ./dumps
 - Select 2D on the visualization window
 - Back into the porperties window, change the colors to Field 13 to get the temperature and press play.
 
+You can observe below the result  of this simulation :
+
+
+![Dumps video](images/video.gif)
 ---
