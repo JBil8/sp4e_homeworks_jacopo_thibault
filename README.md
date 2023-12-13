@@ -40,7 +40,7 @@ More details about dependencies and usage are available in the specific [README.
 
 > Heat Equation Solver
 
-Located in the **Homework2** folder.
+Located in the **Homework3** folder.
 
 More details about dependencies and usage are available in the specific [README.md](./Homework3/README.md) file.
 
