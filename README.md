@@ -9,6 +9,7 @@ This repository contains homework assignments of Jacopo Bilotto and Thibault Ghe
 - [Homework Assignments](#homework-assignments)
     - [Homework 1](#homework_1)
     - [Homework 2](#homework_2)
+    - [Homework 3](#homework_3)
 
 ## Getting Started
 
