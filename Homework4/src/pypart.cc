@@ -95,6 +95,29 @@ PYBIND11_MODULE(pypart, m) {
             py::dynamic_attr() // to allow new members to be created dynamically
     )
     .def(py::init<>())
+    // Give read write access to the properties through acessors
+    .def_property("conductivity", 
+            &ComputeTemperature::getConductivity,
+            [](ComputeTemperature& c, Real val){c.getConductivity() = val; }
+            )
+    .def_property("capacity",
+            &ComputeTemperature::getCapacity,
+            [](ComputeTemperature& c, Real val){c.getCapacity() = val; }
+            )
+    .def_property("density",
+            &ComputeTemperature::getDensity,
+            [](ComputeTemperature& c, Real val){c.getDensity() = val; }
+            )
+    .def_property("L",
+            &ComputeTemperature::getL,
+            [](ComputeTemperature& c, Real val){c.getL() = val; }
+            )
+    .def_property("delta_t",
+            &ComputeTemperature::getDeltat,
+            [](ComputeTemperature& c, Real val){c.getDeltat() = val; }
+            )
+)
+    
 
   // ComputeVerletIntegration
   py::class_<ComputeVerletIntegration, Compute, std::shared_ptr<ComputeVerletIntegration>>(
