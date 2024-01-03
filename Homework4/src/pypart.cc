@@ -12,6 +12,9 @@ PYBIND11_MODULE(pypart, m) {
 
   m.doc() = "pybind of the Particles project";
 
+
+  /***************************************************************************************/
+
   // ParticlesFactoryInterface
   py::class_<ParticlesFactoryInterface>(
             m, "ParticlesFactoryInterface",
@@ -61,6 +64,44 @@ PYBIND11_MODULE(pypart, m) {
             py::dynamic_attr() // to allow new members to be created dynamically
     )  
     .def("getInstance", &MaterialPointsFactory::getInstance,
-             py::return_value_policy::reference)
+            py::return_value_policy::reference)
+
+
+  /***************************************************************************************/
+
+  // Compute
+  py::class_<Compute, std::shared_ptr<Compute>>(
+            m, "Compute",
+            py::dynamic_attr() // to allow new members to be created dynamically
+    );
+
+  // ComputeInteraction
+  py::class_<ComputeInteraction, Compute, std::shared_ptr<ComputeInteraction>>(
+            m, "ComputeInteraction",
+            py::dynamic_attr() // to allow new members to be created dynamically
+    );
+
+  // ComputeGravity
+  py::class_<ComputeGravity, ComputeInteraction, std::shared_ptr<ComputeGravity>>(
+            m, "ComputeGravity",
+            py::dynamic_attr() // to allow new members to be created dynamically
+    )
+    .def(py::init<>())
+    .def("setG", &ComputeGravity::setG);
+  
+  // Compute temperature
+  py::class_<ComputeTemperature, Compute, std::shared_ptr<ComputeTemperature>>(
+            m, "ComputeTemperature",
+            py::dynamic_attr() // to allow new members to be created dynamically
+    )
+    .def(py::init<>())
+
+  // ComputeVerletIntegration
+  py::class_<ComputeVerletIntegration, Compute, std::shared_ptr<ComputeVerletIntegration>>(
+            m, "ComputeVerletIntegration",
+            py::dynamic_attr() // to allow new members to be created dynamically
+    )
+    .def(py::init<>())
+    .def("setDeltaT", &ComputeVerletIntegration::setDeltaT);
 
 }
