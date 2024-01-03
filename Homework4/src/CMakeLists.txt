@@ -86,7 +86,7 @@ if(EXISTS "${PROJECT_SOURCE_DIR}/googletest/CMakeLists.txt")
   add_executable(test_kepler test_kepler.cc)
   add_executable(test_fft test_fft.cc)
   target_link_libraries(test_kepler part gtest_main gtest pthread )
-  target_link_libraries(test_fft part gtest_main gtest pthread ${FFTW_LIBRARIES})
+  target_link_libraries(test_fft part gtest_main gtest pthread ${FFTW_LIB})
   add_custom_target(test ./test_kepler && ./test_fft DEPENDS part test_kepler test_fft)
 else()
   message("
@@ -99,7 +99,7 @@ Did you forget `git submodule update --init`
 endif()
 
 include_directories(.)
-target_link_libraries(part ${FFTW_LIBRARIES})
+target_link_libraries(part ${FFTW_LIB})
 add_executable(particles main.cc)
 target_link_libraries(particles gtest_main gtest pthread part)
 
