@@ -1,0 +1,1 @@
+1.2 The createSimulation function in the ParticlesFactory class is an overloaded template function. It takes a functor func as a parameter, which is then assigned to createComputes. This createSimulation function is designed to allow users to define custom behavior (via func) that is executed at each timestep of the simulation. 
