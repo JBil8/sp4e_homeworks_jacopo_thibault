@@ -126,5 +126,22 @@ PYBIND11_MODULE(pypart, m) {
     )
     .def(py::init<>())
     .def("setDeltaT", &ComputeVerletIntegration::setDeltaT);
+    .def("addInteraction", &ComputeVerletIntegration::addInteraction);
+
+  // CSVWriter
+  py::class_<CsvWriter>(
+            m, "CsvWriter",
+            py::dynamic_attr() // to allow new members to be created dynamically
+    ) 
+    .def(py::init<const std::string&>())
+    .def("write", &CsvWriter::write)
+
+  // System
+  py::class_<System>(
+            m, "System",
+            py::dynamic_attr() // to allow new members to be created dynamically
+    ) 
+    .def(py::init<>())
+    
 
 }
