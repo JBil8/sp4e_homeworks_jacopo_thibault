@@ -94,4 +94,5 @@ if __name__ == "__main__":
     particle_type = args.particle_type
     timestep = args.timestep
 
+    print("test")
     main(nsteps, freq, filename, particle_type, timestep)

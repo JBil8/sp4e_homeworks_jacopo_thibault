@@ -15,6 +15,7 @@ namespace py = pybind11;
 #include "csv_writer.hh"
 
 #include "system.hh"
+#include "system_evolution.hh"
 
 PYBIND11_MODULE(pypart, m) {
 
@@ -127,7 +128,7 @@ PYBIND11_MODULE(pypart, m) {
             m, "ComputeVerletIntegration",
             py::dynamic_attr() // to allow new members to be created dynamically
     )
-    //.def(py::init<>())
+    .def(py::init<Real>())
     .def("setDeltaT", &ComputeVerletIntegration::setDeltaT)
     .def("addInteraction", &ComputeVerletIntegration::addInteraction);
 
@@ -146,5 +147,14 @@ PYBIND11_MODULE(pypart, m) {
     ) 
     .def(py::init<>());
     
-
+  // SystemEvolution
+  py::class_<SystemEvolution>(
+            m, "SystemEvolution",
+            py::dynamic_attr() // to allow new members to be created dynamically
+    ) 
+    .def("evolve", &SystemEvolution::evolve)
+    .def("addCompute", &SystemEvolution::addCompute, py::arg("compute"))
+    .def("getSystem", &SystemEvolution::getSystem)
+    .def("setNSteps", &SystemEvolution::setNSteps, py::arg("nsteps"))
+    .def("setDumpFreq", &SystemEvolution::setDumpFreq, py::arg("freq"));
 }
