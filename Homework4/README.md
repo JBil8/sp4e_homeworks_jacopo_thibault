@@ -1,7 +1,6 @@
 # Week 14 - Homework : Pybind and Trajectory Optimization
 
-The goal of this exercise is to use the external library [Pybind11](https://github.com/pybind/pybind11) to create Python bindings of the C++
-Particles’ code.
+The goal of this exercise is to use the external library [Pybind11](https://github.com/pybind/pybind11) to create Python bindings of the C++ Particles’ code.
 
 ## Table of Contents
 
@@ -48,6 +47,7 @@ mkdir dumps
 
 For testing purposes during development we have included a jupyter notebook `visualization.ipynb` which requires the following modules:
 - **numpy**
+- **scipy**
 - **matplotlib**
 - **ipykernel**
 
@@ -63,9 +63,9 @@ pip install -r requirements.txt
 
 To launch a simulation, from the `build` folder:
 ```bash 
-./particles <n_steps> <dump_freq> ../src/init.csv <particle_type> <timestep>
+python3 main.py <n_steps> <dump_freq> ../src/init.csv <particle_type> <timestep>
 ```
-
+results will be stored as `.csv` files in the `build/dumps` folder.
 ### Arguments
 
 - `<n_steps>`: Number of iterations.
@@ -81,6 +81,32 @@ Launch from the build folder:
 ```bash
 python3 main.py 365 1 ../src/init.csv planet 1
 ```
+
+#### Notebook
+
+The notebook `visualization.ipynb` runs some optimization routines to set the optimum parameters for simulations.
+
+It reads data from the reference values provided in the `src/trajectories` folder and compares it to the output of the simulations.
+The error can be used to rescale the initial velocity in order to achieve better results for one or more planets.
+
+The optimization routine is performed with the code 
+```bash
+scaling_factors = np.linspace(min_scale, max_scale, max_number_samples) 
+errors = []
+
+for scale in scaling_factors:
+    error = runAndComputeError(scale,planet,'init.csv',days,1)
+    errors.append(error)
+
+# Find the optimal scaling factor that minimizes the error
+optimal_scale = fmin(runAndComputeError, 1.0, args=(planet, 'init.csv', days, 1), disp=False)
+```
+where `min_scale` and `max_scale` can be selected euristically for the specific case.
+
+In the example provided in the notebook the optimization is performed for `mercury`.
+
+![Alt Text](optimization.png)
+
 
 ### Questions
 
