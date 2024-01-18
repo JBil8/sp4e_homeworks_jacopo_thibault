@@ -10,6 +10,7 @@ This repository contains homework assignments of Jacopo Bilotto and Thibault Ghe
     - [Homework 1](#homework_1)
     - [Homework 2](#homework_2)
     - [Homework 3](#homework_3)
+    - [Homework 4](#homework-4)
 
 ## Getting Started
 
@@ -45,7 +46,13 @@ Located in the **Homework3** folder.
 
 More details about dependencies and usage are available in the specific [README.md](./Homework3/README.md) file.
 
+### Homework 4
 
+> Pybind & Trajectory optimization
+
+Located in the **Homework4** folder.
+
+More details about dependencies and usage are available in the specific [README.md](./Homework4/README.md) file.
 
 
 

@@ -1,4 +1,4 @@
-R# Week 11 - Homework : Application to a heat equation solver
+# Week 11 - Homework : Application to a heat equation solver
 
 This code uses the library [FFTW](http://fftw.org/) to code an efficient [heat equation](https://en.wikipedia.org/wiki/Heat_equation) solver.
 
